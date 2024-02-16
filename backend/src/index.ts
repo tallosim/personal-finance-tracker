@@ -7,6 +7,7 @@ import { sendErrorMW } from '~/middlewares/common'
 
 import commonRoutes from '~/routes/common'
 import userRoutes from '~/routes/user'
+import categoryRoutes from '~/routes/category'
 
 dotenv.config()
 
@@ -20,6 +21,7 @@ app.use(cookiePraser())
 // Routes
 app.use('/api', commonRoutes)
 app.use('/api/users', userRoutes)
+app.use('/api/categories', categoryRoutes)
 
 // Error 404 handler
 app.use((req: Request, res: Response, next: NextFunction) => {
