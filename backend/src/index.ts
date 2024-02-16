@@ -14,13 +14,7 @@ app.use(json())
 
 // Error 404 handler
 app.use((req: Request, res: Response, next: NextFunction) => {
-    const error: APIError = {
-        status: 404,
-        message: 'API endpoint not found',
-        type: 'NOT_FOUND',
-    }
-
-    return next(error)
+    return next(new APIError(404, 'Not found', 'NOT_FOUND'))
 })
 
 // Error handler
