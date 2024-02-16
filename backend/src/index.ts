@@ -1,4 +1,5 @@
 import express, { json, Request, Response, NextFunction } from 'express'
+import cookiePraser from 'cookie-parser'
 import dotenv from 'dotenv'
 
 import { APIError } from '~/@types'
@@ -14,6 +15,7 @@ const PORT = process.env.PORT || 3000
 const app = express()
 
 app.use(json())
+app.use(cookiePraser())
 
 // Routes
 app.use('/api', commonRoutes)

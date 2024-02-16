@@ -1,3 +1,4 @@
+export * from './authenticationMW'
 export * from './loginMW'
 export * from './sendResponseMW'
 export * from './sendErrorMW'

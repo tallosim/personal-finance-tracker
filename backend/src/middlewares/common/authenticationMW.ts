@@ -1,0 +1,37 @@
+import { Request, Response, NextFunction } from 'express'
+import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
+
+import { APIError } from '~/@types'
+
+dotenv.config()
+
+const JWT_SECRET = process.env.JWT_SECRET
+if (!JWT_SECRET) {
+    throw new Error('JWT_SECRET is not defined')
+}
+
+export const authenticationMW = () => {
+    return (req: Request, res: Response, next: NextFunction) => {
+        // Check if token is not set
+        if (typeof req.cookies === 'undefined' || typeof req.cookies.access_token !== 'string') {
+            return next(new APIError(401, 'Unauthorized', 'UNAUTHORIZED'))
+        }
+
+		// Get token from cookies
+		const accessToken = req.cookies.access_token
+
+        try {
+            // Decode JWT token
+            const decoded = jwt.verify(accessToken, JWT_SECRET)
+
+            // Set user id in response locals
+            res.locals.userId = (decoded as { userId: number; username: string }).userId
+
+            return next()
+        } catch (err) {
+            // If token is invalid or expired
+            return next(new APIError(401, 'Unauthorized', 'UNAUTHORIZED'))
+        }
+    }
+}

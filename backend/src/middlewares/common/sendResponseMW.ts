@@ -6,7 +6,7 @@ import { APIResponse } from '~/@types'
 dotenv.config()
 
 const COOKIE_MAX_AGE = process.env.COOKIE_MAX_AGE ? parseInt(process.env.COOKIE_MAX_AGE) : 24 * 60 * 60 * 1000
-const SECURE = process.env.NODE_ENV === 'production'
+const IS_DEVELOPMENT = process.env.NODE_ENV === 'development'
 
 export const sendResponseMW = (responseKeys: string[] | string = '', setToken: boolean = false) => {
     return (req: Request, res: Response, next: NextFunction) => {
@@ -39,7 +39,8 @@ export const sendResponseMW = (responseKeys: string[] | string = '', setToken: b
             return res
                 .cookie('access_token', res.locals.token, {
                     httpOnly: true,
-                    secure: SECURE,
+                    secure: !IS_DEVELOPMENT,
+                    sameSite: IS_DEVELOPMENT ? 'lax' : 'none',
                     maxAge: COOKIE_MAX_AGE,
                 })
                 .json(response)
