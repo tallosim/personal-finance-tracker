@@ -6,7 +6,7 @@ export const sendResponseMW = (responseKeys: string[] = []) => {
     return (req: Request, res: Response, next: NextFunction) => {
         const response: APIResponse = {
             suceess: true,
-            message: 'Data fetched successfully',
+            message: 'Success',
             data: {},
         }
 
