@@ -1,4 +1,6 @@
 export * from './Category'
+export * from './Error'
 export * from './Finance'
 export * from './ObjectRepository'
+export * from './Response'
 export * from './User'
