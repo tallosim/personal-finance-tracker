@@ -7,8 +7,8 @@ import { APIError, User } from '~/@types'
 export const readUserMW = () => {
     return asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         // Get user id from request params
-        const userId = req.params.id
-        if (typeof userId !== 'string') {
+        const userId = parseInt(req.params.id)
+        if (typeof userId !== 'number' || isNaN(userId)) {
             return next(new APIError(400, 'Invalid user id', 'INVALID_USER_ID'))
         }
 
