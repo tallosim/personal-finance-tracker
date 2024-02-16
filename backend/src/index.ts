@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express'
 import dotenv from 'dotenv'
 
 import db from '~/config/db'
+import { Category } from '~/@types'
 
 dotenv.config()
 
@@ -10,9 +11,9 @@ const PORT = process.env.PORT || 3000
 const app = express()
 
 app.get('/', async (req: Request, res: Response) => {
-	const { rows } = await db.query('SELECT NOW()')
+	const categories = (await db.query('SELECT * FROM categories;')).rows as Category[]
 
-	res.send('Now: ' + rows[0].now)
+	res.json(categories)
 })
 
 app.listen(PORT, () => {
