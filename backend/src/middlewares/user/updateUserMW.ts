@@ -5,15 +5,19 @@ import bcrypt from 'bcrypt'
 import db from '~/config/db'
 import { APIError, User } from '~/@types'
 
-export const createUserMW = () => {
+export const updateUserMW = () => {
     return asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+        // Get user id from request params
+        // The user id is already checked in readUserMW middleware, so we don't need to check it again
+        const userId = parseInt(req.params.id)
+
         // Get username and password from request body, which are already validated by validateSchemaMW middleware
         const { username, password } = req.body
 
         // Check if username is used by another user
         const usernameExists = await db.query('SELECT * FROM users WHERE username = $1;', [username])
-        if (usernameExists.rows.length > 0) {
-            return next(new APIError(400, 'Username is already taken', 'USERNAME_TAKEN'))
+        if (usernameExists.rows.length > 0 && (usernameExists.rows[0] as User).id !== userId) {
+            return next(new APIError(400, 'Username is already taken by another user', 'USERNAME_TAKEN'))
         }
 
         // Hash password
@@ -26,10 +30,10 @@ export const createUserMW = () => {
             createdAt: new Date(),
         }
 
-        // Insert user into database
+        // Update user in database
         const result = await db.query(
-            'INSERT INTO users (username, password, created_at) VALUES ($1, $2, $3) RETURNING *;',
-            [user.username, user.password, user.createdAt],
+            'UPDATE users SET username = $1, password = $2, created_at = $3 WHERE id = $4 RETURNING *;',
+            [user.username, user.password, user.createdAt, userId],
         )
 
         // Set user in response locals
