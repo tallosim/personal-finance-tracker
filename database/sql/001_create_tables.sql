@@ -1,6 +1,6 @@
 CREATE TABLE "users" (
   "id" serial PRIMARY KEY,
-  "username" varchar,
+  "username" varchar UNIQUE,
   "password" varchar,
   "created_at" timestamp
 );

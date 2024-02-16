@@ -4,6 +4,8 @@ import dotenv from 'dotenv'
 import { APIError } from '~/@types'
 import { sendErrorMW } from '~/middlewares/common'
 
+import userRoutes from '~/routes/user'
+
 dotenv.config()
 
 const PORT = process.env.PORT || 3000
@@ -11,6 +13,9 @@ const PORT = process.env.PORT || 3000
 const app = express()
 
 app.use(json())
+
+// Routes
+app.use('/api/users', userRoutes)
 
 // Error 404 handler
 app.use((req: Request, res: Response, next: NextFunction) => {
