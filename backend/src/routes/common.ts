@@ -1,9 +1,11 @@
 import { Router } from 'express'
 
-import { loginMW, sendResponseMW } from '~/middlewares/common'
+import { loginMW, sendResponseMW, validateSchemaMW } from '~/middlewares/common'
+
+import { loginSchema } from '~/schemas'
 
 const router = Router()
 
-router.post('/login', loginMW(), sendResponseMW([], true))
+router.post('/login', validateSchemaMW(loginSchema), loginMW(), sendResponseMW([], true))
 
 export default router
