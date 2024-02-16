@@ -27,13 +27,13 @@ export const updateUserMW = () => {
         const user: Omit<User, 'id'> = {
             username,
             password: passwordHash,
-            createdAt: new Date(),
+            updatedAt: new Date(),
         }
 
         // Update user in database
         const result = await db.query(
-            'UPDATE users SET username = $1, password = $2, created_at = $3 WHERE id = $4 RETURNING *;',
-            [user.username, user.password, user.createdAt, userId],
+            'UPDATE users SET username = $1, password = $2, updated_at = $3 WHERE id = $4 RETURNING *;',
+            [user.username, user.password, user.updatedAt, userId],
         )
 
         // Set user in response locals

@@ -2,7 +2,7 @@ CREATE TABLE "users" (
   "id" serial PRIMARY KEY,
   "username" varchar UNIQUE,
   "password" varchar,
-  "created_at" timestamp
+  "updated_at" timestamp
 );
 
 CREATE TABLE "finances" (
@@ -11,7 +11,7 @@ CREATE TABLE "finances" (
   "desciption" varchar,
   "user_id" integer,
   "category_id" integer,
-  "created_at" timestamp
+  "updated_at" timestamp
 );
 
 CREATE TABLE "categories" (

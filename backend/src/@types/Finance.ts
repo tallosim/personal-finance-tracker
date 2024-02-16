@@ -4,5 +4,5 @@ export interface Finance {
     description: string
     userId: number
     categoryId: number
-    createdAt: Date
+    updatedAt: Date
 }

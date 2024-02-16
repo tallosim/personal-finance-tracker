@@ -23,13 +23,13 @@ export const createUserMW = () => {
         const user: Omit<User, 'id'> = {
             username,
             password: passwordHash,
-            createdAt: new Date(),
+            updatedAt: new Date(),
         }
 
         // Insert user into database
         const result = await db.query(
-            'INSERT INTO users (username, password, created_at) VALUES ($1, $2, $3) RETURNING *;',
-            [user.username, user.password, user.createdAt],
+            'INSERT INTO users (username, password, updated_at) VALUES ($1, $2, $3) RETURNING *;',
+            [user.username, user.password, user.updatedAt],
         )
 
         // Set user in response locals
