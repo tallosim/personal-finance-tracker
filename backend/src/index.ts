@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import { APIError } from '~/@types'
 import { sendErrorMW } from '~/middlewares/common'
 
+import commonRoutes from '~/routes/common'
 import userRoutes from '~/routes/user'
 
 dotenv.config()
@@ -15,6 +16,7 @@ const app = express()
 app.use(json())
 
 // Routes
+app.use('/api', commonRoutes)
 app.use('/api/users', userRoutes)
 
 // Error 404 handler
