@@ -9,7 +9,7 @@ import db from '~/config/db'
 
 dotenv.config()
 
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1h'
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN ? parseInt(process.env.JWT_EXPIRES_IN) : 24 * 60 * 60
 const JWT_SECRET = process.env.JWT_SECRET
 if (!JWT_SECRET) {
     throw new Error('JWT_SECRET is not defined')
@@ -39,7 +39,7 @@ export const loginMW = () => {
 
         // Create token
         const token = jwt.sign({ userId: user.id, username: user.username }, JWT_SECRET, {
-            expiresIn: isNaN(parseInt(JWT_EXPIRES_IN)) ? JWT_EXPIRES_IN : parseInt(JWT_EXPIRES_IN),
+            expiresIn: JWT_EXPIRES_IN,
         })
 
         // Set token in response locals
