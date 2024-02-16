@@ -15,7 +15,7 @@ export const authenticationMW = () => {
     return (req: Request, res: Response, next: NextFunction) => {
         // Check if token is not set
         if (typeof req.cookies === 'undefined' || typeof req.cookies.access_token !== 'string') {
-            return next(new APIError(401, 'Unauthorized', 'UNAUTHORIZED'))
+            return next(new APIError(401, 'Access token is not set', 'UNAUTHORIZED'))
         }
 
 		// Get token from cookies
@@ -31,7 +31,7 @@ export const authenticationMW = () => {
             return next()
         } catch (err) {
             // If token is invalid or expired
-            return next(new APIError(401, 'Unauthorized', 'UNAUTHORIZED'))
+            return next(new APIError(401, 'Invalid or expired access token', 'UNAUTHORIZED'))
         }
     }
 }
