@@ -1,9 +1,11 @@
 import {
     Badge,
     Card,
+    Container,
     HStack,
     Stack,
     Text,
+    List,
     ListItem,
     Square,
     Icon,
@@ -56,7 +58,7 @@ export const TransactionCard = ({ transaction, category }: TransactionCardProps)
                         variant='ghost'
                         size='xs'
                         color='fg.default'
-						_hover={{ bg: 'gray.50' }}
+                        _hover={{ bg: 'gray.50' }}
                     />
                     <MenuList>
                         <MenuItem icon={<FaPenToSquare />}>Edit Transaction</MenuItem>
@@ -67,3 +69,34 @@ export const TransactionCard = ({ transaction, category }: TransactionCardProps)
         </Card>
     </ListItem>
 )
+
+type TransactionListProps = {
+    transactions: Transaction[]
+    categories: Category[]
+}
+
+export const TransactionList = ({ transactions, categories }: TransactionListProps) => {
+    const getCategory = (id: string) =>
+        categories.sort((a, b) => a.sequence - b.sequence).find(c => c.id === id) || categories[categories.length - 1]
+
+    return (
+        <Container maxW='container.xl' p='8'>
+            <Stack spacing='5' flex='1'>
+                <Text textStyle='lg' fontWeight='medium'>
+                    Transactions
+                </Text>
+                <List>
+                    <Stack spacing='3' width='full'>
+                        {transactions.map((transaction, index) => (
+                            <TransactionCard
+                                key={index}
+                                transaction={transaction}
+                                category={getCategory(transaction.categoryId)}
+                            />
+                        ))}
+                    </Stack>
+                </List>
+            </Stack>
+        </Container>
+    )
+}

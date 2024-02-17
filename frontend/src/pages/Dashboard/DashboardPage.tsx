@@ -1,6 +1,6 @@
-import { Center, Stack, Text, List } from '@chakra-ui/react'
+import { Center } from '@chakra-ui/react'
 
-import { TransactionCard } from './Transaction'
+import { TransactionList } from './Transaction'
 import { Transaction, Category } from '@types'
 
 const transactions: Transaction[] = [
@@ -56,6 +56,66 @@ const transactions: Transaction[] = [
     },
     {
         id: '37fc3928-435c-4b87-9b4a-ce69f58ff209',
+        amount: 6395,
+        type: 'income',
+        occurredAt: new Date('2023-09-08T00:00:00.000Z'),
+        description: 'SU',
+        userId: '294939b6-c6ec-4a22-952e-ee9bad0f34c8',
+        categoryId: '15aef98a-d5de-498e-acf6-f74a35e3f987',
+        updatedAt: new Date('2024-02-17T20:37:41.580Z'),
+    },
+    {
+        id: 'a4b34c63-bf22-4aa9-981f-f61178fcde7f',
+        amount: 167.1,
+        type: 'expense',
+        occurredAt: new Date('2023-09-08T00:00:00.000Z'),
+        description: 'Grocery',
+        userId: '294939b6-c6ec-4a22-952e-ee9bad0f34c8',
+        categoryId: '41a004a0-2173-4d7c-83b0-e96fbc0c517e',
+        updatedAt: new Date('2024-02-17T20:37:41.580Z'),
+    },
+    {
+        id: 'a1675c68-c6c0-420a-a22e-8efb7fada617',
+        amount: 375.23,
+        type: 'expense',
+        occurredAt: new Date('2023-09-08T00:00:00.000Z'),
+        description: 'Grocery',
+        userId: '294939b6-c6ec-4a22-952e-ee9bad0f34c8',
+        categoryId: '41a004a0-2173-4d7c-83b0-e96fbc0c517e',
+        updatedAt: new Date('2024-02-17T20:37:41.580Z'),
+    },
+    {
+        id: 'a5bb58ee-87db-4577-8d11-7a0b1d758475',
+        amount: 123.1,
+        type: 'expense',
+        occurredAt: new Date('2023-09-08T00:00:00.000Z'),
+        description: 'Lidl',
+        userId: '294939b6-c6ec-4a22-952e-ee9bad0f34c8',
+        categoryId: '41a004a0-2173-4d7c-83b0-e96fbc0c517e',
+        updatedAt: new Date('2024-02-17T20:37:41.580Z'),
+    },
+    {
+        id: 'b8f88f29-ee09-4049-97d1-81e8968ee405',
+        amount: 3245,
+        type: 'expense',
+        occurredAt: new Date('2023-09-08T00:00:00.000Z'),
+        description: 'Spain',
+        userId: '294939b6-c6ec-4a22-952e-ee9bad0f34c8',
+        categoryId: '15aef98a-d5de-498e-acf6-f74a35e3f987',
+        updatedAt: new Date('2024-02-17T20:37:41.580Z'),
+    },
+    {
+        id: 'a06dc4f3-097d-4a5a-8f11-f168d907a45b',
+        amount: 23000,
+        type: 'income',
+        occurredAt: new Date('2023-09-08T00:00:00.000Z'),
+        description: 'Salary',
+        userId: '294939b6-c6ec-4a22-952e-ee9bad0f34c8',
+        categoryId: '15aef98a-d5de-498e-acf6-f74a35e3f987',
+        updatedAt: new Date('2024-02-17T20:37:41.580Z'),
+    },
+    {
+        id: 'a7fc3928-435c-4b87-9b4a-ce69f58ff209',
         amount: 6395,
         type: 'income',
         occurredAt: new Date('2023-09-08T00:00:00.000Z'),
@@ -150,32 +210,9 @@ const categories: Category[] = [
 ]
 
 export const DashboardPage = () => {
-    const getCategory = (id: string) =>
-        categories.sort((a, b) => a.sequence - b.sequence).find(c => c.id === id) || categories[categories.length - 1]
-
     return (
-        <Center maxW='sm' mx='auto' py={{ base: '4', md: '8' }}>
-            <Stack spacing='5' flex='1'>
-                <Stack spacing='1'>
-                    <Text textStyle='lg' fontWeight='medium'>
-                        Sortable list
-                    </Text>
-                    <Text color='fg.muted' textStyle='sm'>
-                        Grab a card and move it
-                    </Text>
-                </Stack>
-                <List>
-                    <Stack spacing='3' width='full'>
-                        {transactions.map((transaction, index) => (
-                            <TransactionCard
-                                key={index}
-                                transaction={transaction}
-                                category={getCategory(transaction.categoryId)}
-                            />
-                        ))}
-                    </Stack>
-                </List>
-            </Stack>
+        <Center mx='auto' py={{ base: '4', md: '8' }}>
+            <TransactionList transactions={transactions} categories={categories} />
         </Center>
     )
 }
