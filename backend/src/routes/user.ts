@@ -14,6 +14,7 @@ router.put(
     authenticationMW(),
     validateSchemaMW(userSchema),
     readUserMW(),
+    authorizationMW(),
     updateUserMW(),
     sendResponseMW('user'),
 )
