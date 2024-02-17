@@ -5,9 +5,11 @@ CREATE TABLE "users" (
   "updated_at" timestamp
 );
 
-CREATE TABLE "finances" (
+CREATE TYPE "transaction_type" AS ENUM ('income', 'expense');
+CREATE TABLE "transactions" (
   "id" serial PRIMARY KEY,
   "amount" integer,
+  "type" transaction_type,
   "desciption" varchar,
   "user_id" integer,
   "category_id" integer,
@@ -19,5 +21,5 @@ CREATE TABLE "categories" (
   "title" varchar
 );
 
-ALTER TABLE "finances" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
-ALTER TABLE "finances" ADD FOREIGN KEY ("category_id") REFERENCES "categories" ("id");
+ALTER TABLE "transactions" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+ALTER TABLE "transactions" ADD FOREIGN KEY ("category_id") REFERENCES "categories" ("id");
