@@ -31,6 +31,13 @@ export const sendErrorMW = () => {
             response.type = err.type
         }
 
+        // If error is a SyntaxError
+        if (err instanceof SyntaxError) {
+            status = 400
+            response.message = err.message
+            response.type = 'SYNTAX_ERROR'
+        }
+
         return res.status(status).json(response)
     }
 }
