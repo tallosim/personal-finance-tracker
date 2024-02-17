@@ -1,7 +1,7 @@
 import { Router } from 'express'
 
-import { createTransactionMW } from '~/middlewares/transaction'
-import { sendResponseMW, validateSchemaMW, authenticationMW } from '~/middlewares/common'
+import { createTransactionMW, readTransactionMW } from '~/middlewares/transaction'
+import { sendResponseMW, validateSchemaMW, authenticationMW, authorizationMW } from '~/middlewares/common'
 
 import { transactionSchema } from '~/schemas'
 
@@ -14,5 +14,6 @@ router.post(
     createTransactionMW(),
     sendResponseMW('transaction'),
 )
+router.get('/:id', authenticationMW(), readTransactionMW(), authorizationMW(), sendResponseMW('transaction'))
 
 export default router

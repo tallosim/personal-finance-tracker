@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 
-import { APIError, User } from '~/@types'
+import { APIError, User, Transaction } from '~/@types'
 
 export const authorizationMW = () => {
     return (req: Request, res: Response, next: NextFunction) => {
@@ -14,10 +14,15 @@ export const authorizationMW = () => {
             return next()
         }
 
-        // Check if userId from the access token is the same as the userId from the requested finance object
-        // TODO: Add finance object to the response locals
+        // Check if userId from the access token is the same as the userId from the requested transaction object
+        if (
+            typeof res.locals.transaction !== 'undefined' &&
+            res.locals.userId === (res.locals.transaction as Transaction).userId
+        ) {
+            return next()
+        }
 
-		// If none of the above conditions are met, return 403 Forbidden
+        // If none of the above conditions are met, return 403 Forbidden
         return next(new APIError(403, 'Unauthorized access to the requested resource', 'FORBIDDEN'))
     }
 }
