@@ -8,7 +8,7 @@ import { APIError, Transaction } from '~/@types'
 export const createTransactionMW = () => {
     return asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         // Get transaction data from request body, which is already validated by validateSchemaMW middleware
-        const { amount, type, occurred_at, description, categoryId } = req.body
+        const { amount, type, occurredAt, description, categoryId } = req.body
 
         // Get user id from request locals
         const userId = res.locals.userId
@@ -23,7 +23,7 @@ export const createTransactionMW = () => {
         const transaction: Omit<Transaction, 'id'> = {
             amount,
             type,
-            occurred_at,
+            occurredAt,
             description,
             userId,
             categoryId,
@@ -36,7 +36,7 @@ export const createTransactionMW = () => {
             [
                 transaction.amount,
                 transaction.type,
-                transaction.occurred_at,
+                transaction.occurredAt,
                 transaction.description,
                 transaction.userId,
                 transaction.categoryId,

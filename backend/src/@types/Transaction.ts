@@ -7,7 +7,7 @@ export interface Transaction {
     id: string
     amount: number
     type: TransactionType
-    occurred_at: Date
+    occurredAt: Date
     description: string
     userId: string
     categoryId: string
