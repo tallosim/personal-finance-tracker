@@ -2,6 +2,8 @@ import { Stack } from '@chakra-ui/react'
 
 import { TransactionList } from './Transactions'
 import { Statistics } from './Statistics'
+import { NavBar } from './NavBar'
+
 import { Transaction, Category } from '@types'
 
 const transactions: Transaction[] = [
@@ -213,6 +215,7 @@ const categories: Category[] = [
 export const DashboardPage = () => {
     return (
         <Stack>
+            <NavBar name='John Doe' />
             <Statistics />
             <TransactionList transactions={transactions} categories={categories} />
         </Stack>

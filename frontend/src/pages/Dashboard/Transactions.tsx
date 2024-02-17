@@ -100,7 +100,7 @@ export const TransactionList = ({ transactions, categories }: TransactionListPro
                             Add Transaction
                         </Button>
                     </HStack>
-                    <List width='fit-content' overflowY='scroll' maxHeight='70vh' px={4}>
+                    <List width='fit-content' overflowY='scroll' maxHeight='65vh' px={4}>
                         <Stack spacing={3} width='fit-content'>
                             {transactions.map((transaction, index) => (
                                 <TransactionCard
