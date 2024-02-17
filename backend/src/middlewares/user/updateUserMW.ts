@@ -3,6 +3,7 @@ import asyncHandler from 'express-async-handler'
 import bcrypt from 'bcrypt'
 
 import db from '~/config/db'
+import { convertPropertyNamesToCamel } from '~/utils'
 import { APIError, User } from '~/@types'
 
 export const updateUserMW = () => {
@@ -36,8 +37,8 @@ export const updateUserMW = () => {
             [user.username, user.password, user.updatedAt, userId],
         )
 
-        // Set user in response locals
-        res.locals.user = result.rows[0] as User
+        // Convert property names to camel case and set user in response locals
+        res.locals.user = convertPropertyNamesToCamel<User>(result.rows[0])
 
         // Remove password from response
         delete res.locals.user.password

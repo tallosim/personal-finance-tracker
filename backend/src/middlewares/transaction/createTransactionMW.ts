@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import asyncHandler from 'express-async-handler'
 
 import db from '~/config/db'
+import { convertPropertyNamesToCamel } from '~/utils'
 import { APIError, Transaction } from '~/@types'
 
 export const createTransactionMW = () => {
@@ -28,8 +29,6 @@ export const createTransactionMW = () => {
             categoryId,
             updatedAt: new Date(),
         }
-        
-        console.log(transaction)
 
         // Insert transaction into database
         const result = await db.query(
@@ -45,8 +44,8 @@ export const createTransactionMW = () => {
             ],
         )
 
-        // Set transaction in response locals
-        res.locals.transaction = result.rows[0] as Transaction
+        // Convert property names to camel case and set transaction in response locals
+        res.locals.transaction = convertPropertyNamesToCamel<Transaction>(result.rows[0])
 
         return next()
     })

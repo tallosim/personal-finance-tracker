@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import asyncHandler from 'express-async-handler'
 
 import db from '~/config/db'
+import { convertPropertyNamesToCamel } from '~/utils'
 import { APIError, User } from '~/@types'
 
 export const readUserMW = () => {
@@ -20,8 +21,8 @@ export const readUserMW = () => {
             return next(new APIError(404, 'User not exists', 'USER_NOT_EXISTS'))
         }
 
-        // Set user in response locals
-        res.locals.user = result.rows[0] as User
+        // Convert property names to camel case and set user in response locals
+        res.locals.user = convertPropertyNamesToCamel<User>(result.rows[0])
 
         // Remove password from response
         delete res.locals.user.password
