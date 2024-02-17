@@ -1,6 +1,6 @@
 import { Button, Container, FormControl, FormLabel, Heading, Input, Link, Stack, Text } from '@chakra-ui/react'
 
-export const LoginPage = () => (
+const LoginPage = () => (
     <Container maxW='md' py={{ base: '12', md: '24' }}>
         <Stack spacing='8'>
             <Stack spacing={{ base: '2', md: '3' }} textAlign='center'>
