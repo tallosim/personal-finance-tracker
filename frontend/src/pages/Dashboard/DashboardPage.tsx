@@ -1,6 +1,6 @@
 import { Center } from '@chakra-ui/react'
 
-import { TransactionList } from './Transaction'
+import { TransactionList } from './Transactions'
 import { Transaction, Category } from '@types'
 
 const transactions: Transaction[] = [
