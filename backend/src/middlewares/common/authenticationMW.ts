@@ -18,15 +18,20 @@ export const authenticationMW = () => {
             return next(new APIError(401, 'Access token is not set', 'UNAUTHORIZED'))
         }
 
-		// Get token from cookies
-		const accessToken = req.cookies.access_token
+        // Get token from cookies
+        const accessToken = req.cookies.access_token
 
         try {
             // Decode JWT token
             const decoded = jwt.verify(accessToken, JWT_SECRET)
 
+            // Extract user id from token
+            const userId = (decoded as { userId: string; username: string }).userId
+
+            // TODO: Check if user exists in database
+
             // Set user id in response locals
-            res.locals.userId = (decoded as { userId: string; username: string }).userId
+            res.locals.userId = userId
 
             return next()
         } catch (err) {
