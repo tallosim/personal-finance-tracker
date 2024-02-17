@@ -8,10 +8,11 @@ import { sendErrorMW } from '~/middlewares/common'
 import commonRoutes from '~/routes/common'
 import userRoutes from '~/routes/user'
 import categoryRoutes from '~/routes/category'
+import transactionRoutes from '~/routes/transaction'
 
 dotenv.config()
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000
 
 const app = express()
 
@@ -22,10 +23,11 @@ app.use(cookiePraser())
 app.use('/api', commonRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/categories', categoryRoutes)
+app.use('/api/transactions', transactionRoutes)
 
 // Error 404 handler
 app.use((req: Request, res: Response, next: NextFunction) => {
-    return next(new APIError(404, 'Not found', 'NOT_FOUND'))
+    return next(new APIError(404, 'Page not found', 'NOT_FOUND'))
 })
 
 // Error handler
