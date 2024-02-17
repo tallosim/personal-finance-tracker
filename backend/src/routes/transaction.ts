@@ -5,6 +5,7 @@ import {
     readTransactionMW,
     listTransactionsMW,
     calculateStatisticsMW,
+    updateTransactionMW,
 } from '~/middlewares/transaction'
 import { sendResponseMW, validateSchemaMW, authenticationMW, authorizationMW } from '~/middlewares/common'
 
@@ -27,5 +28,14 @@ router.post(
     sendResponseMW('transaction'),
 )
 router.get('/:id', authenticationMW(), readTransactionMW(), authorizationMW(), sendResponseMW('transaction'))
+router.put(
+    '/:id',
+    authenticationMW(),
+    validateSchemaMW(transactionSchema),
+    readTransactionMW(),
+    authorizationMW(),
+    updateTransactionMW(),
+    sendResponseMW('transaction'),
+)
 
 export default router
