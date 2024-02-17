@@ -9,7 +9,7 @@ CREATE TABLE "users" (
 CREATE TYPE "transaction_type" AS ENUM ('income', 'expense');
 CREATE TABLE "transactions" (
   "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  "amount" integer NOT NULL,
+  "amount" real NOT NULL,
   "type" transaction_type NOT NULL,
   "occurred_at" timestamp NOT NULL,
   "description" varchar NOT NULL,
