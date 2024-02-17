@@ -1,0 +1,1448 @@
+openapi: 3.0.3
+info:
+  title: Personal Finance Tracker API
+  description: |-
+    A simple personal finance tracker.
+
+    The API is built with Express.js and the database is PostgreSQL.
+  contact:
+    email: tallosimate@gmail.com
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+
+tags:
+  - name: Authentication
+    description: Authentication endpoints
+  - name: User
+    description: Operations about user
+  - name: Transaction
+    description: Operations about transactions
+  - name: Category
+    description: Operations about categories
+
+paths:
+  /api/login:
+    post:
+      tags:
+        - Authentication
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  example: 'hello@example.com'
+                password:
+                  type: string
+                  example: 'password'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'Login successful'
+                  data:
+                    type: object
+                    example: {}
+          headers:
+            Set-Cookie:
+              description: 'Set-Cookie'
+              schema:
+                type: string
+                example: 'access_token=<jwt_token>; HttpOnly; Secure; SameSite=None'
+        '401':
+          description: Invalid email or password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Invalid email or password'
+                  type:
+                    type: string
+                    example: 'INVALID_EMAIL_OR_PASSWORD'
+                  data:
+                    type: object
+                    example: {}
+        '500':
+          description: Internal Server Error or Database Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Internal Server Error'
+                  type:
+                    type: string
+                    example: 'INTERNAL_SERVER_ERROR'
+                  data:
+                    type: object
+                    example: {}
+
+  /api/users:
+    post:
+      tags:
+        - User
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fullname
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  example: 'hello@example.com'
+                password:
+                  type: string
+                  example: 'password'
+                fullname:
+                  type: string
+                  example: 'John Doe'
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'User registered successfully'
+                  data:
+                    type: object
+                    example:
+                      user:
+                        id: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+                        fullname: 'John Doe'
+                        email: 'hello@example.com'
+                        updatedAt: '2023-09-01T00:00:00.000Z'
+        '400':
+          description: Email already exists or Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Email already exists'
+                  type:
+                    type: string
+                    example: 'EMAIL_ALREADY_EXISTS'
+                  data:
+                    type: object
+                    example: {}
+        '500':
+          description: Server error or Database error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Internal Server Error'
+                  type:
+                    type: string
+                    example: 'INTERNAL_SERVER_ERROR'
+                  data:
+                    type: object
+                    example: {}
+  /api/users/{id}:
+    get:
+      tags:
+        - User
+      summary: Get user by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: User id
+          schema:
+            type: string
+            example: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+        - in: cookie
+          name: access_token
+          required: true
+          description: Access token
+          schema:
+            type: string
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiOTQ1MjYxZi1iMTg0LTQ5OTctOTViYy0yYWNhNmM2ZTM1NzQiLCJ1c2VybmFtZSI6IklfYW1fc2V4eV80MiIsImlhdCI6MTcwODE3MTc0NSwiZXhwIjoxNzA4MjU4MTQ1fQ.W2QcxAK5r2dQDLTQ3PzmJAoyWD0c56wNv5-8vOOXPUg'
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'User registered successfully'
+                  data:
+                    type: object
+                    example:
+                      user:
+                        id: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+                        fullname: 'John Doe'
+                        email: 'hello@example.com'
+                        updatedAt: '2023-09-01T00:00:00.000Z'
+        '401':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Invalid or expired access token'
+                  type:
+                    type: string
+                    example: 'UNAUTHORIZED'
+                  data:
+                    type: object
+                    example: {}
+        '403':
+          description: Forbidden access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Unauthorized access to the requested resource'
+                  type:
+                    type: string
+                    example: 'FORBIDDEN'
+                  data:
+                    type: object
+                    example: {}
+        '404':
+          description: User not exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'User not exists'
+                  type:
+                    type: string
+                    example: 'USER_NOT_EXISTS'
+                  data:
+                    type: object
+                    example: {}
+        '500':
+          description: Server error or Database error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Internal Server Error'
+                  type:
+                    type: string
+                    example: 'INTERNAL_SERVER_ERROR'
+                  data:
+                    type: object
+                    example: {}
+    put:
+      tags:
+        - User
+      summary: Update user by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: User id
+          schema:
+            type: string
+            example: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+        - in: cookie
+          name: access_token
+          required: true
+          description: Access token
+          schema:
+            type: string
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiOTQ1MjYxZi1iMTg0LTQ5OTctOTViYy0yYWNhNmM2ZTM1NzQiLCJ1c2VybmFtZSI6IklfYW1fc2V4eV80MiIsImlhdCI6MTcwODE3MTc0NSwiZXhwIjoxNzA4MjU4MTQ1fQ.W2QcxAK5r2dQDLTQ3PzmJAoyWD0c56wNv5-8vOOXPUg'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fullname
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  example: 'hello@example.com'
+                password:
+                  type: string
+                  example: 'password'
+                fullname:
+                  type: string
+                  example: 'John Doe'
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'User registered successfully'
+                  data:
+                    type: object
+                    example:
+                      user:
+                        id: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+                        fullname: 'John Doe'
+                        email: 'hello@example.com'
+                        updatedAt: '2023-09-01T00:00:00.000Z'
+        '400':
+          description: Email already exists or Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Email already exists'
+                  type:
+                    type: string
+                    example: 'EMAIL_ALREADY_EXISTS'
+                  data:
+                    type: object
+                    example: {}
+        '401':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Invalid or expired access token'
+                  type:
+                    type: string
+                    example: 'UNAUTHORIZED'
+                  data:
+                    type: object
+                    example: {}
+        '403':
+          description: Forbidden access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Unauthorized access to the requested resource'
+                  type:
+                    type: string
+                    example: 'FORBIDDEN'
+                  data:
+                    type: object
+                    example: {}
+        '404':
+          description: User not exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'User not exists'
+                  type:
+                    type: string
+                    example: 'USER_NOT_EXISTS'
+                  data:
+                    type: object
+                    example: {}
+        '500':
+          description: Server error or Database error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Internal Server Error'
+                  type:
+                    type: string
+                    example: 'INTERNAL_SERVER_ERROR'
+                  data:
+                    type: object
+                    example: {}
+    delete:
+      tags:
+        - User
+      summary: Delete user by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: User id
+          schema:
+            type: string
+            example: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+        - in: cookie
+          name: access_token
+          required: true
+          description: Access token
+          schema:
+            type: string
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiOTQ1MjYxZi1iMTg0LTQ5OTctOTViYy0yYWNhNmM2ZTM1NzQiLCJ1c2VybmFtZSI6IklfYW1fc2V4eV80MiIsImlhdCI6MTcwODE3MTc0NSwiZXhwIjoxNzA4MjU4MTQ1fQ.W2QcxAK5r2dQDLTQ3PzmJAoyWD0c56wNv5-8vOOXPUg'
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'User registered successfully'
+                  data:
+                    type: object
+                    example: {}
+        '401':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Invalid or expired access token'
+                  type:
+                    type: string
+                    example: 'UNAUTHORIZED'
+                  data:
+                    type: object
+                    example: {}
+        '403':
+          description: Forbidden access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Unauthorized access to the requested resource'
+                  type:
+                    type: string
+                    example: 'FORBIDDEN'
+                  data:
+                    type: object
+                    example: {}
+        '404':
+          description: User not exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'User not exists'
+                  type:
+                    type: string
+                    example: 'USER_NOT_EXISTS'
+                  data:
+                    type: object
+                    example: {}
+        '500':
+          description: Server error or Database error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Internal Server Error'
+                  type:
+                    type: string
+                    example: 'INTERNAL_SERVER_ERROR'
+                  data:
+                    type: object
+                    example: {}
+
+  /api/transactions:
+    post:
+      tags:
+        - Transaction
+      summary: Create a new transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - amount
+                - type
+                - occurredAt
+                - description
+                - categoryId
+              properties:
+                amount:
+                  type: number
+                  example: 100
+                type:
+                  type: string
+                  example: 'expense'
+                occurredAt:
+                  type: string
+                  format: date-time
+                  example: '2023-09-01T00:00:00.000Z'
+                description:
+                  type: string
+                  example: 'Grocery'
+                categoryId:
+                  type: string
+                  example: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+      parameters:
+        - in: cookie
+          name: access_token
+          required: true
+          description: Access token
+          schema:
+            type: string
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiOTQ1MjYxZi1iMTg0LTQ5OTctOTViYy0yYWNhNmM2ZTM1NzQiLCJ1c2VybmFtZSI6IklfYW1fc2V4eV80MiIsImlhdCI6MTcwODE3MTc0NSwiZXhwIjoxNzA4MjU4MTQ1fQ.W2QcxAK5r2dQDLTQ3PzmJAoyWD0c56wNv5-8vOOXPUg'
+      responses:
+        '200':
+          description: Transaction created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'Success'
+                  data:
+                    type: object
+                    example:
+                      transaction:
+                        id: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+                        amount: 100
+                        type: 'expense'
+                        occurredAt: '2023-09-01T00:00:00.000Z'
+                        description: 'Grocery'
+                        categoryId: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+                        userId: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+                        updatedAt: '2023-09-01T00:00:00.000Z'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Validation error'
+                  type:
+                    type: string
+                    example: 'VALIDATION_ERROR'
+                  data:
+                    type: object
+                    example: {}
+        '401':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Invalid or expired access token'
+                  type:
+                    type: string
+                    example: 'UNAUTHORIZED'
+                  data:
+                    type: object
+                    example: {}
+        '403':
+          description: Forbidden access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Unauthorized access to the requested resource'
+                  type:
+                    type: string
+                    example: 'FORBIDDEN'
+                  data:
+                    type: object
+                    example: {}
+        '500':
+          description: Server error or Database error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Internal Server Error'
+                  type:
+                    type: string
+                    example: 'INTERNAL_SERVER_ERROR'
+                  data:
+                    type: object
+                    example: {}
+    get:
+      tags:
+        - Transaction
+      summary: List all transactions
+      parameters:
+        - in: cookie
+          name: access_token
+          required: true
+          description: Access token
+          schema:
+            type: string
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiOTQ1MjYxZi1iMTg0LTQ5OTctOTViYy0yYWNhNmM2ZTM1NzQiLCJ1c2VybmFtZSI6IklfYW1fc2V4eV80MiIsImlhdCI6MTcwODE3MTc0NSwiZXhwIjoxNzA4MjU4MTQ1fQ.W2QcxAK5r2dQDLTQ3PzmJAoyWD0c56wNv5-8vOOXPUg'
+      responses:
+        '200':
+          description: Transaction read successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'Success'
+                  data:
+                    type: object
+                    example:
+                      transactions:
+                        - id: 'a945261f-b184-4997-95bc-2aca6c6e3574'
+                          amount: 100
+                          type: 'expense'
+                          occurredAt: '2023-09-01T00:00:00.000Z'
+                          description: 'Grocery'
+                          categoryId: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+                          userId: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+                          updatedAt: '2023-09-01T00:00:00.000Z'
+                        - id: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+                          amount: 200
+                          type: 'expense'
+                          occurredAt: '2023-09-01T00:00:00.000Z'
+                          description: 'Grocery'
+                          categoryId: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+                          userId: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+                          updatedAt: '2023-09-01T00:00:00.000Z'
+                      statistics:
+                        totalIncome: 0
+                        totalExpense: 300
+                        balance: -300
+        '401':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Invalid or expired access token'
+                  type:
+                    type: string
+                    example: 'UNAUTHORIZED'
+                  data:
+                    type: object
+                    example: {}
+        '403':
+          description: Forbidden access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Unauthorized access to the requested resource'
+                  type:
+                    type: string
+                    example: 'FORBIDDEN'
+                  data:
+                    type: object
+                    example: {}
+        '500':
+          description: Server error or Database error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Internal Server Error'
+                  type:
+                    type: string
+                    example: 'INTERNAL_SERVER_ERROR'
+                  data:
+                    type: object
+                    example: {}
+  /api/transactions/{id}:
+    get:
+      tags:
+        - Transaction
+      summary: Get transaction by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Transaction id
+          schema:
+            type: string
+            example: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+        - in: cookie
+          name: access_token
+          required: true
+          description: Access token
+          schema:
+            type: string
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiOTQ1MjYxZi1iMTg0LTQ5OTctOTViYy0yYWNhNmM2ZTM1NzQiLCJ1c2VybmFtZSI6IklfYW1fc2V4eV80MiIsImlhdCI6MTcwODE3MTc0NSwiZXhwIjoxNzA4MjU4MTQ1fQ.W2QcxAK5r2dQDLTQ3PzmJAoyWD0c56wNv5-8vOOXPUg'
+      responses:
+        '200':
+          description: Transaction read successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'Success'
+                  data:
+                    type: object
+                    example:
+                      transaction:
+                        id: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+                        amount: 100
+                        type: 'expense'
+                        occurredAt: '2023-09-01T00:00:00.000Z'
+                        description: 'Grocery'
+                        categoryId: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+                        userId: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+                        updatedAt: '2023-09-01T00:00:00.000Z'
+        '401':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Invalid or expired access token'
+                  type:
+                    type: string
+                    example: 'UNAUTHORIZED'
+                  data:
+                    type: object
+                    example: {}
+        '403':
+          description: Forbidden access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Unauthorized access to the requested resource'
+                  type:
+                    type: string
+                    example: 'FORBIDDEN'
+                  data:
+                    type: object
+                    example: {}
+        '404':
+          description: Transaction not exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Transaction not exists'
+                  type:
+                    type: string
+                    example: 'TRANSACTION_NOT_EXISTS'
+                  data:
+                    type: object
+                    example: {}
+        '500':
+          description: Server error or Database error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Internal Server Error'
+                  type:
+                    type: string
+                    example: 'INTERNAL_SERVER_ERROR'
+                  data:
+                    type: object
+                    example: {}
+    put:
+      tags:
+        - Transaction
+      summary: Update transaction by id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - amount
+                - type
+                - occurredAt
+                - description
+                - categoryId
+              properties:
+                amount:
+                  type: number
+                  example: 100
+                type:
+                  type: string
+                  example: 'expense'
+                occurredAt:
+                  type: string
+                  format: date-time
+                  example: '2023-09-01T00:00:00.000Z'
+                description:
+                  type: string
+                  example: 'Grocery'
+                categoryId:
+                  type: string
+                  example: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Transaction id
+          schema:
+            type: string
+            example: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+        - in: cookie
+          name: access_token
+          required: true
+          description: Access token
+          schema:
+            type: string
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiOTQ1MjYxZi1iMTg0LTQ5OTctOTViYy0yYWNhNmM2ZTM1NzQiLCJ1c2VybmFtZSI6IklfYW1fc2V4eV80MiIsImlhdCI6MTcwODE3MTc0NSwiZXhwIjoxNzA4MjU4MTQ1fQ.W2QcxAK5r2dQDLTQ3PzmJAoyWD0c56wNv5-8vOOXPUg'
+      responses:
+        '200':
+          description: Transaction updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'Success'
+                  data:
+                    type: object
+                    example:
+                      transaction:
+                        id: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+                        amount: 100
+                        type: 'expense'
+                        occurredAt: '2023-09-01T00:00:00.000Z'
+                        description: 'Grocery'
+                        categoryId: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+                        userId: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+                        updatedAt: '2023-09-01T00:00:00.000Z'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Validation error'
+                  type:
+                    type: string
+                    example: 'VALIDATION_ERROR'
+                  data:
+                    type: object
+                    example: {}
+        '401':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Invalid or expired access token'
+                  type:
+                    type: string
+                    example: 'UNAUTHORIZED'
+                  data:
+                    type: object
+                    example: {}
+        '403':
+          description: Forbidden access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Unauthorized access to the requested resource'
+                  type:
+                    type: string
+                    example: 'FORBIDDEN'
+                  data:
+                    type: object
+                    example: {}
+        '404':
+          description: Transaction not exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Transaction not exists'
+                  type:
+                    type: string
+                    example: 'TRANSACTION_NOT_EXISTS'
+                  data:
+                    type: object
+                    example: {}
+        '500':
+          description: Server error or Database error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Internal Server Error'
+                  type:
+                    type: string
+                    example: 'INTERNAL_SERVER_ERROR'
+                  data:
+                    type: object
+                    example: {}
+    delete:
+      tags:
+        - Transaction
+      summary: Delete transaction by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Transaction id
+          schema:
+            type: string
+            example: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+        - in: cookie
+          name: access_token
+          required: true
+          description: Access token
+          schema:
+            type: string
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiOTQ1MjYxZi1iMTg0LTQ5OTctOTViYy0yYWNhNmM2ZTM1NzQiLCJ1c2VybmFtZSI6IklfYW1fc2V4eV80MiIsImlhdCI6MTcwODE3MTc0NSwiZXhwIjoxNzA4MjU4MTQ1fQ.W2QcxAK5r2dQDLTQ3PzmJAoyWD0c56wNv5-8vOOXPUg'
+      responses:
+        '200':
+          description: Transaction read successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'Success'
+                  data:
+                    type: object
+                    example: {}
+        '401':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Invalid or expired access token'
+                  type:
+                    type: string
+                    example: 'UNAUTHORIZED'
+                  data:
+                    type: object
+                    example: {}
+        '403':
+          description: Forbidden access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Unauthorized access to the requested resource'
+                  type:
+                    type: string
+                    example: 'FORBIDDEN'
+                  data:
+                    type: object
+                    example: {}
+        '404':
+          description: Transaction not exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Transaction not exists'
+                  type:
+                    type: string
+                    example: 'TRANSACTION_NOT_EXISTS'
+                  data:
+                    type: object
+                    example: {}
+        '500':
+          description: Server error or Database error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Internal Server Error'
+                  type:
+                    type: string
+                    example: 'INTERNAL_SERVER_ERROR'
+                  data:
+                    type: object
+                    example: {}
+  /api/categories:
+    get:
+      tags:
+        - Category
+      summary: List all categories
+      parameters:
+        - in: cookie
+          name: access_token
+          required: true
+          description: Access token
+          schema:
+            type: string
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiOTQ1MjYxZi1iMTg0LTQ5OTctOTViYy0yYWNhNmM2ZTM1NzQiLCJ1c2VybmFtZSI6IklfYW1fc2V4eV80MiIsImlhdCI6MTcwODE3MTc0NSwiZXhwIjoxNzA4MjU4MTQ1fQ.W2QcxAK5r2dQDLTQ3PzmJAoyWD0c56wNv5-8vOOXPUg'
+      responses:
+        '200':
+          description: Categories read successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'Success'
+                  data:
+                    type: object
+                    example:
+                      categories:
+                        - id: 'a945261f-b184-4997-95bc-2aca6c6e3574'
+                          title: 'Home'
+                          sequence: 1
+                        - id: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+                          title: 'Grocery'
+                          sequence: 2
+        '401':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Invalid or expired access token'
+                  type:
+                    type: string
+                    example: 'UNAUTHORIZED'
+                  data:
+                    type: object
+                    example: {}
+        '403':
+          description: Forbidden access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Unauthorized access to the requested resource'
+                  type:
+                    type: string
+                    example: 'FORBIDDEN'
+                  data:
+                    type: object
+                    example: {}
+        '500':
+          description: Server error or Database error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Internal Server Error'
+                  type:
+                    type: string
+                    example: 'INTERNAL_SERVER_ERROR'
+                  data:
+                    type: object
+                    example: {}
+  /api/categories/{id}:
+    get:
+      tags:
+        - Category
+      summary: Get category by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Category id
+          schema:
+            type: string
+            example: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+        - in: cookie
+          name: access_token
+          required: true
+          description: Access token
+          schema:
+            type: string
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiOTQ1MjYxZi1iMTg0LTQ5OTctOTViYy0yYWNhNmM2ZTM1NzQiLCJ1c2VybmFtZSI6IklfYW1fc2V4eV80MiIsImlhdCI6MTcwODE3MTc0NSwiZXhwIjoxNzA4MjU4MTQ1fQ.W2QcxAK5r2dQDLTQ3PzmJAoyWD0c56wNv5-8vOOXPUg'
+      responses:
+        '200':
+          description: Categories read successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'Success'
+                  data:
+                    type: object
+                    example:
+                      categories:
+                        - id: 'a945261f-b184-4997-95bc-2aca6c6e3574'
+                          title: 'Home'
+                          sequence: 1
+                        - id: 'b945261f-b184-4997-95bc-2aca6c6e3574'
+                          title: 'Grocery'
+                          sequence: 2
+        '401':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Invalid or expired access token'
+                  type:
+                    type: string
+                    example: 'UNAUTHORIZED'
+                  data:
+                    type: object
+                    example: {}
+        '403':
+          description: Forbidden access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Unauthorized access to the requested resource'
+                  type:
+                    type: string
+                    example: 'FORBIDDEN'
+                  data:
+                    type: object
+                    example: {}
+        '404':
+          description: Category not exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Category not exists'
+                  type:
+                    type: string
+                    example: 'CATEGORY_NOT_EXISTS'
+                  data:
+                    type: object
+                    example: {}
+        '500':
+          description: Server error or Database error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Internal Server Error'
+                  type:
+                    type: string
+                    example: 'INTERNAL_SERVER_ERROR'
+                  data:
+                    type: object
+                    example: {}

@@ -1,5 +1,15 @@
 # Personal Finance Tracker
 
+A simple personal finance tracker.
+
+The API is built with Express.js and the database is PostgreSQL.
+
+## API
+
+The API is built with Express.js.
+
+The API is documented with OpenAPI 3.0.3. The documentation is available at [/api-docs](http://localhost:3000/api-docs).
+
 ## Development
 
 ### Prerequisites

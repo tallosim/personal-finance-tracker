@@ -1,5 +1,8 @@
 import express, { json, Request, Response, NextFunction } from 'express'
 import cookiePraser from 'cookie-parser'
+import swaggerUi from 'swagger-ui-express'
+import fs from 'fs'
+import YAML from 'yaml'
 import dotenv from 'dotenv'
 
 import { APIError } from '~/@types'
@@ -24,6 +27,10 @@ app.use('/api', commonRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/categories', categoryRoutes)
 app.use('/api/transactions', transactionRoutes)
+
+// Swagger
+const openapiDefinition = YAML.parse(fs.readFileSync('./openapi.yml', 'utf8'))
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiDefinition))
 
 // Error 404 handler
 app.use((req: Request, res: Response, next: NextFunction) => {
