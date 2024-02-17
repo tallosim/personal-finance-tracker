@@ -1,5 +1,6 @@
 import {
     Badge,
+    Button,
     Card,
     Container,
     Center,
@@ -17,7 +18,14 @@ import {
     MenuItem,
 } from '@chakra-ui/react'
 import { Transaction, Category } from '@types'
-import { FaHandHoldingDollar, FaMoneyBill1, FaEllipsisVertical, FaPenToSquare, FaTrashCan } from 'react-icons/fa6'
+import {
+    FaHandHoldingDollar,
+    FaMoneyBill1,
+    FaEllipsisVertical,
+    FaPenToSquare,
+    FaTrashCan,
+    FaPlus,
+} from 'react-icons/fa6'
 
 type TransactionCardProps = {
     transaction: Transaction
@@ -26,17 +34,17 @@ type TransactionCardProps = {
 
 export const TransactionCard = ({ transaction, category }: TransactionCardProps) => (
     <ListItem key={transaction.id} value={transaction.id} position='relative' width='fit-content'>
-        <Card bg='bg.surface' p='4' width='lg' borderRadius='lg' boxShadow='sm'>
-            <HStack spacing='4' display='flex' alignItems='center'>
-                <Square size='12' bg={transaction.type === 'income' ? 'green.400' : 'red.400'} borderRadius='md'>
+        <Card bg='bg.surface' p={4} width='lg' borderRadius='lg' boxShadow='sm'>
+            <HStack spacing={4} display='flex' alignItems='center'>
+                <Square size={12} bg={transaction.type === 'income' ? 'green.400' : 'red.400'} borderRadius='md'>
                     <Icon
                         as={transaction.type === 'income' ? FaHandHoldingDollar : FaMoneyBill1}
                         boxSize='6'
                         color='fg.accent.default'
                     />
                 </Square>
-                <Stack spacing='1'>
-                    <HStack spacing='2'>
+                <Stack spacing={1}>
+                    <HStack spacing={2}>
                         <Text textStyle='lg' fontWeight='medium'>
                             {transaction.description}
                         </Text>
@@ -84,9 +92,14 @@ export const TransactionList = ({ transactions, categories }: TransactionListPro
         <Center>
             <Container p={4} width='fit-content'>
                 <Stack spacing={4} flex={1} width='fit-content'>
-                    <Text textStyle='lg' fontWeight='medium'>
-                        Transactions
-                    </Text>
+                    <HStack display='flex' justifyContent='space-between' width='full' alignItems='center'>
+                        <Text textStyle='2xl' fontWeight='semibold'>
+                            Transactions
+                        </Text>
+                        <Button leftIcon={<FaPlus />} colorScheme='blue' variant='solid' size='xs'>
+                            Add Transaction
+                        </Button>
+                    </HStack>
                     <List width='fit-content' overflowY='scroll' maxHeight='70vh' px={4}>
                         <Stack spacing={3} width='fit-content'>
                             {transactions.map((transaction, index) => (
