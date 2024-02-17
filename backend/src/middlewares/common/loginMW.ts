@@ -17,15 +17,15 @@ if (!JWT_SECRET) {
 
 export const loginMW = () => {
     return asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        // Get username and password from request body
-        const { username, password } = req.body
+        // Get email and password from request body
+        const { email, password } = req.body
 
         // Get user from database
-        const result = await db.query('SELECT * FROM users WHERE username = $1;', [username])
+        const result = await db.query('SELECT * FROM users WHERE email = $1;', [email])
 
         // Check if user exists
         if (result.rowCount === 0) {
-            return next(new APIError(401, 'Invalid username or password', 'INVALID_USERNAME_OR_PASSWORD'))
+            return next(new APIError(401, 'Invalid email or password', 'INVALID_EMAIL_OR_PASSWORD'))
         }
 
         // Get user from result
@@ -34,11 +34,11 @@ export const loginMW = () => {
         // Compare password
         const passwordMatch = await bcrypt.compare(password, user.password)
         if (!passwordMatch) {
-            return next(new APIError(401, 'Invalid username or password', 'INVALID_USERNAME_OR_PASSWORD'))
+            return next(new APIError(401, 'Invalid email or password', 'INVALID_EMAIL_OR_PASSWORD'))
         }
 
         // Create token
-        const token = jwt.sign({ userId: user.id, username: user.username }, JWT_SECRET, {
+        const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, {
             expiresIn: JWT_EXPIRES_IN,
         })
 

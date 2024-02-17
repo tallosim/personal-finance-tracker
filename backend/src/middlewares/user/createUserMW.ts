@@ -8,13 +8,13 @@ import { APIError, User } from '~/@types'
 
 export const createUserMW = () => {
     return asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        // Get username and password from request body, which are already validated by validateSchemaMW middleware
-        const { username, password } = req.body
+        // Get email and password from request body, which are already validated by validateSchemaMW middleware
+        const { email, password } = req.body
 
-        // Check if username is used by another user
-        const usernameExists = await db.query('SELECT * FROM users WHERE username = $1;', [username])
-        if (usernameExists.rows.length > 0) {
-            return next(new APIError(400, 'Username is already taken', 'USERNAME_TAKEN'))
+        // Check if email is used by another user
+        const emailExists = await db.query('SELECT * FROM users WHERE email = $1;', [email])
+        if (emailExists.rows.length > 0) {
+            return next(new APIError(400, 'EMAIL is already taken', 'EMAIL_EXISTS'))
         }
 
         // Hash password
@@ -22,15 +22,15 @@ export const createUserMW = () => {
 
         // Create user object
         const user: Omit<User, 'id'> = {
-            username,
+            email,
             password: passwordHash,
             updatedAt: new Date(),
         }
 
         // Insert user into database
         const result = await db.query(
-            'INSERT INTO users (username, password, updated_at) VALUES ($1, $2, $3) RETURNING *;',
-            [user.username, user.password, user.updatedAt],
+            'INSERT INTO users (email, password, updated_at) VALUES ($1, $2, $3) RETURNING *;',
+            [user.email, user.password, user.updatedAt],
         )
 
         // Convert property names to camel case and set user in response locals

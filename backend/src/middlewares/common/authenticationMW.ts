@@ -26,7 +26,7 @@ export const authenticationMW = () => {
             const decoded = jwt.verify(accessToken, JWT_SECRET)
 
             // Extract user id from token
-            const userId = (decoded as { userId: string; username: string }).userId
+            const userId = (decoded as { userId: string; email: string }).userId
 
             // TODO: Check if user exists in database
 
