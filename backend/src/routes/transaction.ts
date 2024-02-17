@@ -1,13 +1,24 @@
 import { Router } from 'express'
 
-import { createTransactionMW, readTransactionMW, listTransactionsMW } from '~/middlewares/transaction'
+import {
+    createTransactionMW,
+    readTransactionMW,
+    listTransactionsMW,
+    calculateStatisticsMW,
+} from '~/middlewares/transaction'
 import { sendResponseMW, validateSchemaMW, authenticationMW, authorizationMW } from '~/middlewares/common'
 
 import { transactionSchema } from '~/schemas'
 
 const router = Router()
 
-router.get('/', authenticationMW(), listTransactionsMW(), sendResponseMW('transactions'))
+router.get(
+    '/',
+    authenticationMW(),
+    listTransactionsMW(),
+    calculateStatisticsMW(),
+    sendResponseMW(['transactions', 'statistics']),
+)
 router.post(
     '/',
     authenticationMW(),
