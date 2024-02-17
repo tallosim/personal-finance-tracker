@@ -12,7 +12,7 @@ services:
     container_name: express
     restart: always
     ports:
-      - 3000:3000
+      - 8000:8000
     links:
       - db
     depends_on:
