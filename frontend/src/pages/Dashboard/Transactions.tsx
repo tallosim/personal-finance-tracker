@@ -2,6 +2,7 @@ import {
     Badge,
     Card,
     Container,
+    Center,
     HStack,
     Stack,
     Text,
@@ -24,7 +25,7 @@ type TransactionCardProps = {
 }
 
 export const TransactionCard = ({ transaction, category }: TransactionCardProps) => (
-    <ListItem key={transaction.id} value={transaction.id} position='relative'>
+    <ListItem key={transaction.id} value={transaction.id} position='relative' width='fit-content'>
         <Card bg='bg.surface' p='4' width='lg' borderRadius='lg' boxShadow='sm'>
             <HStack spacing='4' display='flex' alignItems='center'>
                 <Square size='12' bg={transaction.type === 'income' ? 'green.400' : 'red.400'} borderRadius='md'>
@@ -80,23 +81,25 @@ export const TransactionList = ({ transactions, categories }: TransactionListPro
         categories.sort((a, b) => a.sequence - b.sequence).find(c => c.id === id) || categories[categories.length - 1]
 
     return (
-        <Container maxW='container.xl' p='8'>
-            <Stack spacing='5' flex='1'>
-                <Text textStyle='lg' fontWeight='medium'>
-                    Transactions
-                </Text>
-                <List>
-                    <Stack spacing='3' width='full'>
-                        {transactions.map((transaction, index) => (
-                            <TransactionCard
-                                key={index}
-                                transaction={transaction}
-                                category={getCategory(transaction.categoryId)}
-                            />
-                        ))}
-                    </Stack>
-                </List>
-            </Stack>
-        </Container>
+        <Center>
+            <Container p={4} width='fit-content'>
+                <Stack spacing={4} flex={1} width='fit-content'>
+                    <Text textStyle='lg' fontWeight='medium'>
+                        Transactions
+                    </Text>
+                    <List width='fit-content' overflowY='scroll' maxHeight='70vh' px={4}>
+                        <Stack spacing={3} width='fit-content'>
+                            {transactions.map((transaction, index) => (
+                                <TransactionCard
+                                    key={index}
+                                    transaction={transaction}
+                                    category={getCategory(transaction.categoryId)}
+                                />
+                            ))}
+                        </Stack>
+                    </List>
+                </Stack>
+            </Container>
+        </Center>
     )
 }

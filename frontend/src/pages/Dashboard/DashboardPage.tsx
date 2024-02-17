@@ -1,6 +1,7 @@
-import { Center } from '@chakra-ui/react'
+import { Stack } from '@chakra-ui/react'
 
 import { TransactionList } from './Transactions'
+import { Statistics } from './Statistics'
 import { Transaction, Category } from '@types'
 
 const transactions: Transaction[] = [
@@ -211,9 +212,10 @@ const categories: Category[] = [
 
 export const DashboardPage = () => {
     return (
-        <Center mx='auto' py={{ base: '4', md: '8' }}>
+        <Stack>
+            <Statistics />
             <TransactionList transactions={transactions} categories={categories} />
-        </Center>
+        </Stack>
     )
 }
 
