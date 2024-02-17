@@ -10,6 +10,7 @@ CREATE TABLE "transactions" (
   "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   "amount" integer NOT NULL,
   "type" transaction_type NOT NULL,
+  "occurred_at" timestamp NOT NULL,
   "desciption" varchar NOT NULL,
   "user_id" uuid NOT NULL,
   "category_id" uuid NOT NULL,
