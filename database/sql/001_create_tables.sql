@@ -11,7 +11,7 @@ CREATE TABLE "transactions" (
   "amount" integer NOT NULL,
   "type" transaction_type NOT NULL,
   "occurred_at" timestamp NOT NULL,
-  "desciption" varchar NOT NULL,
+  "description" varchar NOT NULL,
   "user_id" uuid NOT NULL,
   "category_id" uuid NOT NULL,
   "updated_at" timestamp NOT NULL
