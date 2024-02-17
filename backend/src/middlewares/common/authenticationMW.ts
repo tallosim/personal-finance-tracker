@@ -26,7 +26,7 @@ export const authenticationMW = () => {
             const decoded = jwt.verify(accessToken, JWT_SECRET)
 
             // Set user id in response locals
-            res.locals.userId = (decoded as { userId: number; username: string }).userId
+            res.locals.userId = (decoded as { userId: string; username: string }).userId
 
             return next()
         } catch (err) {

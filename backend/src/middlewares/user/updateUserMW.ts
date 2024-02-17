@@ -9,7 +9,7 @@ export const updateUserMW = () => {
     return asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         // Get user id from request params
         // The user id is already checked in readUserMW middleware, so we don't need to check it again
-        const userId = parseInt(req.params.id)
+        const userId = req.params.id
 
         // Get username and password from request body, which are already validated by validateSchemaMW middleware
         const { username, password } = req.body

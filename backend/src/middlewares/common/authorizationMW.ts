@@ -5,7 +5,7 @@ import { APIError, User } from '~/@types'
 export const authorizationMW = () => {
     return (req: Request, res: Response, next: NextFunction) => {
         // Check if userId is not set
-        if (typeof res.locals.userId !== 'number') {
+        if (typeof res.locals.userId !== 'string') {
             throw new Error('userId is not defined')
         }
 
