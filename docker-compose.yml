@@ -1,0 +1,23 @@
+version: '3'
+services:
+  db:
+    build: ./database
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+
+  api:
+    build: ./backend
+    container_name: express
+    restart: always
+    ports:
+      - 3000:3000
+    links:
+      - db
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PASSWORD: password
+      JWT_SECRET: secret
