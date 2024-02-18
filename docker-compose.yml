@@ -1,23 +1,35 @@
 version: '3'
 services:
-  db:
+  database:
     build: ./database
-    container_name: postgres
     restart: always
     environment:
       POSTGRES_PASSWORD: password
 
-  api:
+  backend:
     build: ./backend
-    container_name: express
+    restart: always
+    links:
+      - database
+    depends_on:
+      - database
+    environment:
+      DB_HOST: database
+      DB_PASSWORD: password
+      JWT_SECRET: supersecret
+
+  frontend:
+    build: ./frontend
+    image: frontend
+
+  nginx:
+    build: ./nginx
     restart: always
     ports:
-      - 8000:8000
+      - 8000:3000
     links:
-      - db
+      - backend
+      - frontend
     depends_on:
-      - db
-    environment:
-      DB_HOST: db
-      DB_PASSWORD: password
-      JWT_SECRET: secret
+      - backend
+      - frontend
