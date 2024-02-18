@@ -29,6 +29,7 @@ export const Transactions = ({
         .map(t => ({ ...t, category: categories.find(c => c.id === t.categoryId) || categories[0] }))
 
     const categoriesWithTransactions = categories
+		.filter(c => c.title.toLocaleLowerCase() !== 'income')
         .map(c => ({
             ...c,
             transactions: transactionsWithCategory.filter(t => t.categoryId === c.id).filter(t => t.type === 'expense'),
