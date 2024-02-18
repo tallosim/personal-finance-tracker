@@ -12,8 +12,8 @@ export const updateUserMW = () => {
         // The user id is already checked in readUserMW middleware, so we don't need to check it again
         const userId = req.params.id
 
-        // Get fullname, email and password from request body, which are already validated by validateSchemaMW middleware
-        const { fullname, email, password } = req.body
+        // Get name, email and password from request body, which are already validated by validateSchemaMW middleware
+        const { name, email, password } = req.body
 
         // Check if email is used by another user
         const emailExists = await db.query('SELECT * FROM users WHERE email = $1;', [email])
@@ -26,7 +26,7 @@ export const updateUserMW = () => {
 
         // Create user object
         const user: Omit<User, 'id'> = {
-            fullname,
+            name,
             email,
             password: passwordHash,
             updatedAt: new Date(),
@@ -34,8 +34,8 @@ export const updateUserMW = () => {
 
         // Update user in database
         const result = await db.query(
-            'UPDATE users SET fullname = $1, email = $2, password = $3, updated_at = $4 WHERE id = $5 RETURNING *;',
-            [user.fullname, user.email, user.password, user.updatedAt, userId],
+            'UPDATE users SET name = $1, email = $2, password = $3, updated_at = $4 WHERE id = $5 RETURNING *;',
+            [user.name, user.email, user.password, user.updatedAt, userId],
         )
 
         // Convert property names to camel case and set user in response locals

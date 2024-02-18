@@ -8,8 +8,8 @@ import { APIError, User } from '~/@types'
 
 export const createUserMW = () => {
     return asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        // Get fullname, email and password from request body, which are already validated by validateSchemaMW middleware
-        const { fullname, email, password } = req.body
+        // Get name, email and password from request body, which are already validated by validateSchemaMW middleware
+        const { name, email, password } = req.body
 
         // Check if email is used by another user
         const emailExists = await db.query('SELECT * FROM users WHERE email = $1;', [email])
@@ -22,7 +22,7 @@ export const createUserMW = () => {
 
         // Create user object
         const user: Omit<User, 'id'> = {
-            fullname,
+            name,
             email,
             password: passwordHash,
             updatedAt: new Date(),
@@ -30,8 +30,8 @@ export const createUserMW = () => {
 
         // Insert user into database
         const result = await db.query(
-            'INSERT INTO users (fullname, email, password, updated_at) VALUES ($1, $2, $3, $4) RETURNING *;',
-            [user.fullname, user.email, user.password, user.updatedAt],
+            'INSERT INTO users (name, email, password, updated_at) VALUES ($1, $2, $3, $4) RETURNING *;',
+            [user.name, user.email, user.password, user.updatedAt],
         )
 
         // Convert property names to camel case and set user in response locals

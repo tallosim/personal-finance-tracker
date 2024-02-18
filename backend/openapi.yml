@@ -118,7 +118,7 @@ paths:
             schema:
               type: object
               required:
-                - fullname
+                - name
                 - email
                 - password
               properties:
@@ -128,7 +128,7 @@ paths:
                 password:
                   type: string
                   example: 'password'
-                fullname:
+                name:
                   type: string
                   example: 'John Doe'
       responses:
@@ -150,7 +150,7 @@ paths:
                     example:
                       user:
                         id: 'b945261f-b184-4997-95bc-2aca6c6e3574'
-                        fullname: 'John Doe'
+                        name: 'John Doe'
                         email: 'hello@example.com'
                         updatedAt: '2023-09-01T00:00:00.000Z'
         '400':
@@ -230,7 +230,7 @@ paths:
                     example:
                       user:
                         id: 'b945261f-b184-4997-95bc-2aca6c6e3574'
-                        fullname: 'John Doe'
+                        name: 'John Doe'
                         email: 'hello@example.com'
                         updatedAt: '2023-09-01T00:00:00.000Z'
         '401':
@@ -335,7 +335,7 @@ paths:
             schema:
               type: object
               required:
-                - fullname
+                - name
                 - email
                 - password
               properties:
@@ -345,7 +345,7 @@ paths:
                 password:
                   type: string
                   example: 'password'
-                fullname:
+                name:
                   type: string
                   example: 'John Doe'
       responses:
@@ -367,7 +367,7 @@ paths:
                     example:
                       user:
                         id: 'b945261f-b184-4997-95bc-2aca6c6e3574'
-                        fullname: 'John Doe'
+                        name: 'John Doe'
                         email: 'hello@example.com'
                         updatedAt: '2023-09-01T00:00:00.000Z'
         '400':
