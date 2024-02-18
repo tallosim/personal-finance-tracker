@@ -94,6 +94,7 @@ export const TransactionCard = ({
 type TransactionListProps = {
     transactions: Transaction[]
     categories: Category[]
+    handleAddTransaction: () => void
     handleEditTransaction: (transactionId: string) => void
     handleDeleteTransaction: (transactionId: string) => void
 }
@@ -101,6 +102,7 @@ type TransactionListProps = {
 export const TransactionList = ({
     transactions,
     categories,
+    handleAddTransaction,
     handleEditTransaction,
     handleDeleteTransaction,
 }: TransactionListProps) => {
@@ -115,7 +117,7 @@ export const TransactionList = ({
                         <Text textStyle='2xl' fontWeight='semibold'>
                             Transactions
                         </Text>
-                        <Button leftIcon={<FaPlus />} colorScheme='blue' variant='solid' size='xs'>
+                        <Button leftIcon={<FaPlus />} colorScheme='blue' variant='solid' size='xs' onClick={handleAddTransaction}>
                             Add Transaction
                         </Button>
                     </HStack>

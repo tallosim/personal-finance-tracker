@@ -216,6 +216,12 @@ export const DashboardPage = () => {
     const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure()
     const [transactionId, setTransactionId] = useState<string | null>(null)
 
+    // Handlers
+    const handleAddTransaction = () => {
+        setTransactionId(null)
+        onEditOpen()
+    }
+
     const handleEditTransaction = (id: string) => {
         setTransactionId(id)
         onEditOpen()
@@ -240,6 +246,7 @@ export const DashboardPage = () => {
                 <TransactionList
                     transactions={transactions}
                     categories={categories}
+                    handleAddTransaction={handleAddTransaction}
                     handleEditTransaction={handleEditTransaction}
                     handleDeleteTransaction={handleDeleteTransaction}
                 />

@@ -33,7 +33,7 @@ export const TransactionEditModal = ({ transaction, categories, isOpen, onClose 
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>{transaction ? 'Edit transaction' : 'Create transaction'}</ModalHeader>
+                <ModalHeader>{transaction ? 'Edit transaction' : 'Add transaction'}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody pb={6}>
                     <Stack spacing={4}>
