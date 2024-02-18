@@ -6,6 +6,6 @@ import { loginSchema } from '~/schemas'
 
 const router = Router()
 
-router.post('/login', validateSchemaMW(loginSchema), loginMW(), sendResponseMW([], true))
+router.post('/login', validateSchemaMW(loginSchema), loginMW(), sendResponseMW('token', true))
 
 export default router

@@ -60,7 +60,8 @@ paths:
                     example: 'Login successful'
                   data:
                     type: object
-                    example: {}
+                    example:
+                      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMDNmYTcxNC00Y2MyLTQ3YmMtYjI0OS01ZjliNmFhMWU0MjAiLCJlbWFpbCI6InRhbGxvc2ltYXRlQGdtYWlsLmNvbSIsImlhdCI6MTcwODI2MDM5MCwiZXhwIjoxNzA4MzQ2NzkwfQ.hCTLu9Lq6CDPZWOJSRwefmFdkwNp9rqzimW9Pwg492s'
           headers:
             Set-Cookie:
               description: 'Set-Cookie'
