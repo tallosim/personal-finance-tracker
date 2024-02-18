@@ -1,4 +1,5 @@
 import {
+    Box,
     Badge,
     Button,
     Card,
@@ -120,15 +121,23 @@ export const TransactionList = ({
                     </HStack>
                     <List width='fit-content' overflowY='scroll' maxHeight='65vh' px={4}>
                         <Stack spacing={3} width='fit-content'>
-                            {transactions.map((transaction, index) => (
-                                <TransactionCard
-                                    key={index}
-                                    transaction={transaction}
-                                    category={getCategory(transaction.categoryId)}
-                                    handleEditTransaction={handleEditTransaction}
-                                    handleDeleteTransaction={handleDeleteTransaction}
-                                />
-                            ))}
+                            {transactions.length > 0 ? (
+                                transactions.map((transaction, index) => (
+                                    <TransactionCard
+                                        key={index}
+                                        transaction={transaction}
+                                        category={getCategory(transaction.categoryId)}
+                                        handleEditTransaction={handleEditTransaction}
+                                        handleDeleteTransaction={handleDeleteTransaction}
+                                    />
+                                ))
+                            ) : (
+                                <Box width='lg' textAlign='center'>
+                                    <Text textStyle='lg' fontWeight='medium' color='fg.muted'>
+                                        No transactions yet
+                                    </Text>
+                                </Box>
+                            )}
                         </Stack>
                     </List>
                 </Stack>
