@@ -119,22 +119,25 @@ export const DashboardPage = () => {
     const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure()
     const [transactionId, setTransactionId] = useState<string | null>(null)
 
-    // Handlers
+    // Handle open add transaction modal
     const handleOpenAddTransaction = () => {
         setTransactionId(null)
         onEditOpen()
     }
 
+    // Handle open edit transaction modal
     const handleOpenEditTransaction = (id: string) => {
         setTransactionId(id)
         onEditOpen()
     }
 
+    // Handle open delete transaction modal
     const handleOpenDeleteTransaction = (id: string) => {
         setTransactionId(id)
         onDeleteOpen()
     }
 
+    // Handle close modals
     const handleCloseModals = () => {
         onEditClose()
         onDeleteClose()
