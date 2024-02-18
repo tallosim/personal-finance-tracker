@@ -4,16 +4,19 @@ import { BrowserRouter } from 'react-router-dom'
 import { theme } from '@chakra-ui/pro-theme'
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 
-import App from './App'
+import App from 'App'
 
 const proTheme = extendTheme(theme)
-const customTheme = extendTheme({
-    colors: {
-        ...proTheme.colors,
-        accentColor: 'gray',
-        brand: proTheme.colors.blue,
+const customTheme = extendTheme(
+    {
+        colors: {
+            ...proTheme.colors,
+            accentColor: 'gray',
+            brand: proTheme.colors.blue,
+        },
     },
-}, proTheme)
+    proTheme,
+)
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
