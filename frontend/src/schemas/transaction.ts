@@ -7,5 +7,5 @@ export const transactionSchema = Yup.object({
         .required('Description is required'),
     amount: Yup.string().required('Amount is required'),
     categoryId: Yup.string().required('Category is required'),
-	occurredAt: Yup.date().required('Date is required'),
+    occurredAt: Yup.date().required('Date is required'),
 })
