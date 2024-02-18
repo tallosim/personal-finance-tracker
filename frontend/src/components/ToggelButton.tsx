@@ -7,7 +7,7 @@
 import { Button, ButtonGroup, ButtonGroupProps } from '@chakra-ui/react'
 import { useState } from 'react'
 
-export interface ToggleButtonGroupProps extends Omit<ButtonGroupProps, 'onChange'> {
+interface ToggleButtonGroupProps extends Omit<ButtonGroupProps, 'onChange'> {
     children: JSX.Element | JSX.Element[]
     initialIndex?: number
     allowNone?: boolean

@@ -14,15 +14,10 @@ import {
     MenuItem,
 } from '@chakra-ui/react'
 import { Transaction, Category } from '@types'
-import {
-    FaHandHoldingDollar,
-    FaMoneyBill1,
-    FaEllipsisVertical,
-    FaPenToSquare,
-    FaTrashCan,
-} from 'react-icons/fa6'
+import { FaHandHoldingDollar, FaMoneyBill1, FaEllipsisVertical, FaPenToSquare, FaTrashCan } from 'react-icons/fa6'
 
 type TransactionCardProps = {
+    showCategory?: boolean
     transaction: Transaction
     category: Category
     handleEditTransaction: (transactionId: string) => void
@@ -30,6 +25,7 @@ type TransactionCardProps = {
 }
 
 export const TransactionCard = ({
+    showCategory = true,
     transaction,
     category,
     handleEditTransaction,
@@ -50,9 +46,11 @@ export const TransactionCard = ({
                         <Text textStyle='lg' fontWeight='medium'>
                             {transaction.description}
                         </Text>
-                        <Badge colorScheme='blue' variant='subtle' size='xs'>
-                            {category.title}
-                        </Badge>
+                        {showCategory && (
+                            <Badge colorScheme='blue' variant='subtle' size='xs'>
+                                {category.title}
+                            </Badge>
+                        )}
                     </HStack>
                     <Text textStyle='sm' color='fg.muted'>
                         {new Date(transaction.occurredAt).toLocaleDateString()}
