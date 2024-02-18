@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Stack, useDisclosure } from '@chakra-ui/react'
 
-import { NavBar, Statistics, TransactionList, TransactionEditModal } from 'components'
+import { NavBar, Statistics, TransactionList, TransactionEditModal, TransactionDeleteModal } from 'components'
 import { Transaction, Category } from '@types'
 
 const transactions: Transaction[] = [
@@ -211,13 +211,25 @@ const categories: Category[] = [
 ]
 
 export const DashboardPage = () => {
-    // Transaction edit modal
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    // Transaction edit and delete modal
+    const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure()
+    const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure()
     const [transactionId, setTransactionId] = useState<string | null>(null)
 
     const handleEditTransaction = (id: string) => {
         setTransactionId(id)
-        onOpen()
+        onEditOpen()
+    }
+
+    const handleDeleteTransaction = (id: string) => {
+        setTransactionId(id)
+        onDeleteOpen()
+    }
+
+    const handleCloseModals = () => {
+        onEditClose()
+        onDeleteClose()
+        setTransactionId(null)
     }
 
     return (
@@ -229,14 +241,16 @@ export const DashboardPage = () => {
                     transactions={transactions}
                     categories={categories}
                     handleEditTransaction={handleEditTransaction}
+                    handleDeleteTransaction={handleDeleteTransaction}
                 />
             </Stack>
             <TransactionEditModal
-                isOpen={isOpen}
-                onClose={onClose}
+                isOpen={isEditOpen}
+                onClose={handleCloseModals}
                 transaction={transactionId ? transactions.find(t => t.id === transactionId) || null : null}
                 categories={categories}
             />
+            <TransactionDeleteModal isOpen={isDeleteOpen} onClose={handleCloseModals} />
         </React.Fragment>
     )
 }

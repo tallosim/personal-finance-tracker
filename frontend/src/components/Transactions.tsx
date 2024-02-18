@@ -31,9 +31,15 @@ type TransactionCardProps = {
     transaction: Transaction
     category: Category
     handleEditTransaction: (transactionId: string) => void
+    handleDeleteTransaction: (transactionId: string) => void
 }
 
-export const TransactionCard = ({ transaction, category, handleEditTransaction }: TransactionCardProps) => (
+export const TransactionCard = ({
+    transaction,
+    category,
+    handleEditTransaction,
+    handleDeleteTransaction,
+}: TransactionCardProps) => (
     <ListItem key={transaction.id} value={transaction.id} position='relative' width='fit-content'>
         <Card bg='bg.surface' p={4} width='lg' borderRadius='lg' boxShadow='sm'>
             <HStack spacing={4} display='flex' alignItems='center'>
@@ -74,7 +80,9 @@ export const TransactionCard = ({ transaction, category, handleEditTransaction }
                         <MenuItem icon={<FaPenToSquare />} onClick={() => handleEditTransaction(transaction.id)}>
                             Edit Transaction
                         </MenuItem>
-                        <MenuItem icon={<FaTrashCan />}>Delete Transaction</MenuItem>
+                        <MenuItem icon={<FaTrashCan />} onClick={() => handleDeleteTransaction(transaction.id)}>
+                            Delete Transaction
+                        </MenuItem>
                     </MenuList>
                 </Menu>
             </HStack>
@@ -86,9 +94,15 @@ type TransactionListProps = {
     transactions: Transaction[]
     categories: Category[]
     handleEditTransaction: (transactionId: string) => void
+    handleDeleteTransaction: (transactionId: string) => void
 }
 
-export const TransactionList = ({ transactions, categories, handleEditTransaction }: TransactionListProps) => {
+export const TransactionList = ({
+    transactions,
+    categories,
+    handleEditTransaction,
+    handleDeleteTransaction,
+}: TransactionListProps) => {
     const getCategory = (id: string) =>
         categories.sort((a, b) => a.sequence - b.sequence).find(c => c.id === id) || categories[categories.length - 1]
 
@@ -112,6 +126,7 @@ export const TransactionList = ({ transactions, categories, handleEditTransactio
                                     transaction={transaction}
                                     category={getCategory(transaction.categoryId)}
                                     handleEditTransaction={handleEditTransaction}
+                                    handleDeleteTransaction={handleDeleteTransaction}
                                 />
                             ))}
                         </Stack>

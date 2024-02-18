@@ -85,3 +85,27 @@ export const TransactionEditModal = ({ transaction, categories, isOpen, onClose 
         </Modal>
     )
 }
+
+type TransactionDeleteModalProps = {
+    isOpen: boolean
+    onClose: () => void
+}
+
+export const TransactionDeleteModal = ({ isOpen, onClose }: TransactionDeleteModalProps) => {
+    return (
+        <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>Delete transaction</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>Are you sure you want to delete this transaction?</ModalBody>
+                <ModalFooter>
+                    <Button colorScheme='red' mr={3}>
+                        Delete
+                    </Button>
+                    <Button onClick={onClose}>Cancel</Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
+    )
+}
