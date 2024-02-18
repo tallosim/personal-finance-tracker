@@ -147,7 +147,7 @@ export const DashboardPage = () => {
     return (
         <React.Fragment>
             <Stack>
-                <NavBar name='John Doe' />
+                <NavBar />
                 <ErrorAlert message={error} />
                 <StatCards statistics={statistics} isLoading={isCategoryLoading} />
                 <TransactionList

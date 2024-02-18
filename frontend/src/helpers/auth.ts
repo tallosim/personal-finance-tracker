@@ -1,25 +1,52 @@
 export const isLoggedIn = () => {
-    // Get the expiration date of the token from the local storage
-    const expirationDate = localStorage.getItem('expirationDate')
+    // Get the userData from the local storage
+    const userData = localStorage.getItem('userData')
 
-    // If there is no expiration date, the user is not logged in
-    if (!expirationDate) {
+    // If there is no userData, the user is not logged in
+    if (!userData) {
         return false
     }
 
-    // If the expiration date is in the past, the user is not logged in and remove the expiration date from the local storage
-    if (new Date(expirationDate) <= new Date()) {
-        localStorage.removeItem('expirationDate')
+    try {
+        // Parse the userData
+        const userDataObject = JSON.parse(userData)
+
+        // If the expiration date is in the past, the user is not logged in and remove the expiration date from the local storage
+        if (new Date(userDataObject.expirationDate) <= new Date()) {
+            localStorage.removeItem('userData')
+            return false
+        }
+
+        return true
+    } catch {
         return false
     }
-
-    return true
 }
 
 export const logout = () => {
-    // Remove the expiration date from the local storage
-    localStorage.removeItem('expirationDate')
+    // Remove the userData from the local storage
+    localStorage.removeItem('userData')
 
     // Navigate to the login page
     window.location.href = '/login'
+}
+
+export const getUserId = () => {
+    // Get the userData from the local storage
+    const userData = localStorage.getItem('userData')
+
+    // If there is no userData, return null
+    if (!userData) {
+        return null
+    }
+
+    try {
+        // Parse the userData
+        const userDataObject = JSON.parse(userData)
+
+        // Return the user id
+        return userDataObject.userId as string
+    } catch {
+        return null
+    }
 }
