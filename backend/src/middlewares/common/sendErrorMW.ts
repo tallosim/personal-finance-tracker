@@ -11,7 +11,7 @@ export const sendErrorMW = () => {
         // Default status and response
         let status = 500
         const response: APIResponse = {
-            suceess: false,
+            success: false,
             message: 'Internal server error',
             type: 'INTERNAL_SERVER_ERROR',
             data: {},

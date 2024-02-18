@@ -12,7 +12,7 @@ export const sendResponseMW = (responseKeys: string[] | string = '', setToken: b
     return (req: Request, res: Response, next: NextFunction) => {
         // Create response object
         const response: APIResponse = {
-            suceess: true,
+            success: true,
             message: 'Success',
             data: {},
         }
