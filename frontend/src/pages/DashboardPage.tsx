@@ -1,6 +1,7 @@
+import React from 'react'
 import { Stack } from '@chakra-ui/react'
 
-import { NavBar, Statistics, TransactionList } from 'components'
+import { NavBar, Statistics, TransactionList, TransactionEditModal } from 'components'
 import { Transaction, Category } from '@types'
 
 const transactions: Transaction[] = [
@@ -211,11 +212,19 @@ const categories: Category[] = [
 
 export const DashboardPage = () => {
     return (
-        <Stack>
-            <NavBar name='John Doe' />
-            <Statistics />
-            <TransactionList transactions={transactions} categories={categories} />
-        </Stack>
+        <React.Fragment>
+            <Stack>
+                <NavBar name='John Doe' />
+                <Statistics />
+                <TransactionList transactions={transactions} categories={categories} />
+            </Stack>
+            <TransactionEditModal
+                isOpen={true}
+                onClose={() => console.log('close')}
+                transaction={transactions[0]}
+                categories={categories}
+            />
+        </React.Fragment>
     )
 }
 
