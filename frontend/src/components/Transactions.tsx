@@ -43,7 +43,7 @@ export const TransactionCard = ({
     handleDeleteTransaction,
 }: TransactionCardProps) => (
     <ListItem key={transaction.id} value={transaction.id} position='relative' width='fit-content'>
-        <Card bg='bg.surface' p={4} width='lg' borderRadius='lg' boxShadow='sm'>
+        <Card bg='bg.surface' p={4} width='xl' borderRadius='lg' boxShadow='sm'>
             <HStack spacing={4} display='flex' alignItems='center'>
                 <Square size={12} bg={transaction.type === 'income' ? 'green.400' : 'red.400'} borderRadius='md'>
                     <Icon
@@ -62,11 +62,12 @@ export const TransactionCard = ({
                         </Badge>
                     </HStack>
                     <Text textStyle='sm' color='fg.muted'>
-                        {transaction.occurredAt.toLocaleDateString()}
+                        {new Date(transaction.occurredAt).toLocaleDateString()}
                     </Text>
                 </Stack>
                 <Text textStyle='2xl' fontWeight='medium' flexGrow={1} textAlign='right'>
-                    {transaction.type === 'income' ? '+' : '-'} {transaction.amount} DKK
+                    {transaction.amount !== 0 ? (transaction.type === 'income' ? '+' : '-') : ''}{' '}
+                    {transaction.amount.toFixed(2)} DKK
                 </Text>
                 <Menu>
                     <MenuButton
@@ -130,7 +131,7 @@ export const TransactionList = ({
                             Add Transaction
                         </Button>
                     </HStack>
-                    <List width='fit-content' overflowY='scroll' maxHeight='65vh' px={4}>
+                    <List width='fit-content' overflowY='scroll' maxHeight='65vh' p={4}>
                         <Stack spacing={3} width='fit-content'>
                             {isLoading ? (
                                 <Box width='lg' textAlign='center'>
@@ -143,15 +144,17 @@ export const TransactionList = ({
                                     />
                                 </Box>
                             ) : transactions.length > 0 ? (
-                                transactions.map((transaction, index) => (
-                                    <TransactionCard
-                                        key={index}
-                                        transaction={transaction}
-                                        category={getCategory(transaction.categoryId)}
-                                        handleEditTransaction={handleEditTransaction}
-                                        handleDeleteTransaction={handleDeleteTransaction}
-                                    />
-                                ))
+                                transactions
+                                    .sort((a, b) => new Date(b.occurredAt).getTime() - new Date(a.occurredAt).getTime())
+                                    .map((transaction, index) => (
+                                        <TransactionCard
+                                            key={index}
+                                            transaction={transaction}
+                                            category={getCategory(transaction.categoryId)}
+                                            handleEditTransaction={handleEditTransaction}
+                                            handleDeleteTransaction={handleDeleteTransaction}
+                                        />
+                                    ))
                             ) : (
                                 <Box width='lg' textAlign='center'>
                                     <Text textStyle='lg' fontWeight='medium' color='fg.muted'>

@@ -19,4 +19,7 @@ export const isLoggedIn = () => {
 export const logout = () => {
     // Remove the expiration date from the local storage
     localStorage.removeItem('expirationDate')
+
+    // Navigate to the login page
+    window.location.href = '/login'
 }

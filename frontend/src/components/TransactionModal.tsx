@@ -28,17 +28,28 @@ type TransactionModalProps = {
     transaction: Transaction | null
     categories: Category[]
     isOpen: boolean
+    isLoading: boolean
     onClose: () => void
+    onAddSave: (transaction: Omit<Transaction, 'id' | 'userId' | 'updatedAt'>) => void
+    onEditSave: (id: string, transaction: Omit<Transaction, 'id' | 'userId' | 'updatedAt'>) => void
 }
 
-export const TransactionEditModal = ({ transaction, categories, isOpen, onClose }: TransactionModalProps) => {
+export const TransactionEditModal = ({
+    transaction,
+    categories,
+    isOpen,
+    isLoading,
+    onClose,
+    onAddSave,
+    onEditSave,
+}: TransactionModalProps) => {
     const isEdit = transaction && isOpen
     const initialValues = {
         type: isEdit ? transaction.type : 'expense',
         description: isEdit ? transaction.description : '',
         amount: isEdit ? transaction.amount.toString() : '0.00',
         categoryId: isEdit ? transaction.categoryId : '',
-        occurredAt: isEdit ? transaction.occurredAt.toISOString().slice(0, 16) : '',
+        occurredAt: isEdit ? new Date(transaction.occurredAt).toISOString().slice(0, 16) : '',
     }
 
     const { values, errors, touched, handleChange, setFieldValue, handleSubmit, handleBlur, resetForm } = useFormik({
@@ -53,8 +64,8 @@ export const TransactionEditModal = ({ transaction, categories, isOpen, onClose 
                 categoryId: values.categoryId,
                 occurredAt: new Date(values.occurredAt),
             }
-            console.log(newTransaction)
-            // TODO: Implement the logic to save the transaction
+            if (isEdit) onEditSave(transaction.id, newTransaction)
+            else onAddSave(newTransaction)
 
             resetForm()
             onClose()
@@ -76,7 +87,7 @@ export const TransactionEditModal = ({ transaction, categories, isOpen, onClose 
                 <ModalCloseButton />
                 <ModalBody pb={6}>
                     <Stack spacing={4}>
-                        <FormControl isRequired isInvalid={Boolean(errors.type) && touched.type}>
+                        <FormControl isRequired isInvalid={Boolean(errors.type) && touched.type} isDisabled={isLoading}>
                             <FormLabel>Transaction type</FormLabel>
                             <RadioGroup
                                 id='type'
@@ -93,7 +104,11 @@ export const TransactionEditModal = ({ transaction, categories, isOpen, onClose 
                             </RadioGroup>
                             <FormErrorMessage>{errors.type}</FormErrorMessage>
                         </FormControl>
-                        <FormControl isRequired isInvalid={Boolean(errors.description) && touched.description}>
+                        <FormControl
+                            isRequired
+                            isInvalid={Boolean(errors.description) && touched.description}
+                            isDisabled={isLoading}
+                        >
                             <FormLabel>Description</FormLabel>
                             <Input
                                 id='description'
@@ -105,7 +120,11 @@ export const TransactionEditModal = ({ transaction, categories, isOpen, onClose 
                             />
                             <FormErrorMessage>{errors.description}</FormErrorMessage>
                         </FormControl>
-                        <FormControl isRequired isInvalid={Boolean(errors.amount) && touched.amount}>
+                        <FormControl
+                            isRequired
+                            isInvalid={Boolean(errors.amount) && touched.amount}
+                            isDisabled={isLoading}
+                        >
                             <FormLabel>Amount (DKK)</FormLabel>
                             <NumberInput
                                 id='amount'
@@ -120,7 +139,11 @@ export const TransactionEditModal = ({ transaction, categories, isOpen, onClose 
                             </NumberInput>
                             <FormErrorMessage>{errors.amount}</FormErrorMessage>
                         </FormControl>
-                        <FormControl isRequired isInvalid={Boolean(errors.categoryId) && touched.categoryId}>
+                        <FormControl
+                            isRequired
+                            isInvalid={Boolean(errors.categoryId) && touched.categoryId}
+                            isDisabled={isLoading}
+                        >
                             <FormLabel>Category</FormLabel>
                             <Select
                                 id='categoryId'
@@ -140,7 +163,11 @@ export const TransactionEditModal = ({ transaction, categories, isOpen, onClose 
                             </Select>
                             <FormErrorMessage>{errors.categoryId}</FormErrorMessage>
                         </FormControl>
-                        <FormControl isRequired isInvalid={Boolean(errors.occurredAt) && touched.occurredAt}>
+                        <FormControl
+                            isRequired
+                            isInvalid={Boolean(errors.occurredAt) && touched.occurredAt}
+                            isDisabled={isLoading}
+                        >
                             <FormLabel>Transaction date</FormLabel>
                             <Input
                                 id='occurredAt'
@@ -154,7 +181,7 @@ export const TransactionEditModal = ({ transaction, categories, isOpen, onClose 
                     </Stack>
                 </ModalBody>
                 <ModalFooter>
-                    <Button colorScheme='blue' mr={3} onClick={() => handleSubmit()}>
+                    <Button colorScheme='blue' mr={3} onClick={() => handleSubmit()} isLoading={isLoading}>
                         Save
                     </Button>
                     <Button onClick={onClose}>Cancel</Button>
@@ -166,10 +193,17 @@ export const TransactionEditModal = ({ transaction, categories, isOpen, onClose 
 
 type TransactionDeleteModalProps = {
     isOpen: boolean
+    isLoading: boolean
     onClose: () => void
+    onDelete: () => void
 }
 
-export const TransactionDeleteModal = ({ isOpen, onClose }: TransactionDeleteModalProps) => {
+export const TransactionDeleteModal = ({ isOpen, isLoading, onClose, onDelete }: TransactionDeleteModalProps) => {
+    const handleDelete = () => {
+        onDelete()
+        onClose()
+    }
+
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
@@ -178,7 +212,7 @@ export const TransactionDeleteModal = ({ isOpen, onClose }: TransactionDeleteMod
                 <ModalCloseButton />
                 <ModalBody>Are you sure you want to delete this transaction?</ModalBody>
                 <ModalFooter>
-                    <Button colorScheme='red' mr={3}>
+                    <Button colorScheme='red' mr={3} onClick={handleDelete} isLoading={isLoading}>
                         Delete
                     </Button>
                     <Button onClick={onClose}>Cancel</Button>

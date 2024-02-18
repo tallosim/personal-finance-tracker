@@ -9,11 +9,11 @@ import {
     TransactionEditModal,
     TransactionDeleteModal,
 } from 'components'
-import { listTransactions, listCategories } from 'services'
+import { listTransactions, listCategories, createTransaction, updateTransaction, deleteTransaction } from 'services'
 import { Transaction, Category, Statistics } from '@types'
 
 export const DashboardPage = () => {
-    // Create state variables for loading, error and data
+    // Create state variables for loading, error and data for transactions, statistics and categories
     const [isTransactionLoading, setIsTransactionLoading] = useState<boolean>(false)
     const [isCategoryLoading, setIsCategoryLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
@@ -23,6 +23,7 @@ export const DashboardPage = () => {
 
     // Fetch transactions from the API
     const fetchTransactions = async () => {
+        setError(null)
         setIsTransactionLoading(true)
 
         const { success, data, message } = await listTransactions()
@@ -39,6 +40,7 @@ export const DashboardPage = () => {
 
     // Fetch categories from the API
     const fetchCategories = async () => {
+        setError(null)
         setIsCategoryLoading(true)
 
         const { success, data, message } = await listCategories()
@@ -61,23 +63,74 @@ export const DashboardPage = () => {
         fetchData()
     }, [])
 
+    // Loading state for transaction add/edit
+    const [isTransactionOperationLoading, setIsTransactionOperationLoading] = useState<boolean>(false)
+
+    // Function to add a transaction
+    const fetchAddTransaction = async (transaction: Omit<Transaction, 'id' | 'userId' | 'updatedAt'>) => {
+        setError(null)
+        setIsTransactionOperationLoading(true)
+
+        const { success, message } = await createTransaction(transaction)
+
+        setIsTransactionOperationLoading(false)
+
+        if (success) {
+            await fetchTransactions()
+        } else {
+            setError(message)
+        }
+    }
+
+    // Function to edit a transaction
+    const fetchEditTransaction = async (id: string, transaction: Omit<Transaction, 'id' | 'userId' | 'updatedAt'>) => {
+        setError(null)
+        setIsTransactionOperationLoading(true)
+
+        const { success, message } = await updateTransaction(id, transaction)
+
+        setIsTransactionOperationLoading(false)
+
+        if (success) {
+            await fetchTransactions()
+        } else {
+            setError(message)
+        }
+    }
+
+    // Function to delete a transaction
+    const fetchDeleteTransaction = async (id: string) => {
+        setError(null)
+        setIsTransactionOperationLoading(true)
+
+        const { success, message } = await deleteTransaction(id)
+
+        setIsTransactionOperationLoading(false)
+
+        if (success) {
+            await fetchTransactions()
+        } else {
+            setError(message)
+        }
+    }
+
     // Transaction edit and delete modal
     const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure()
     const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure()
     const [transactionId, setTransactionId] = useState<string | null>(null)
 
     // Handlers
-    const handleAddTransaction = () => {
+    const handleOpenAddTransaction = () => {
         setTransactionId(null)
         onEditOpen()
     }
 
-    const handleEditTransaction = (id: string) => {
+    const handleOpenEditTransaction = (id: string) => {
         setTransactionId(id)
         onEditOpen()
     }
 
-    const handleDeleteTransaction = (id: string) => {
+    const handleOpenDeleteTransaction = (id: string) => {
         setTransactionId(id)
         onDeleteOpen()
     }
@@ -98,18 +151,26 @@ export const DashboardPage = () => {
                     isLoading={isTransactionLoading}
                     transactions={transactions}
                     categories={categories}
-                    handleAddTransaction={handleAddTransaction}
-                    handleEditTransaction={handleEditTransaction}
-                    handleDeleteTransaction={handleDeleteTransaction}
+                    handleAddTransaction={handleOpenAddTransaction}
+                    handleEditTransaction={handleOpenEditTransaction}
+                    handleDeleteTransaction={handleOpenDeleteTransaction}
                 />
             </Stack>
             <TransactionEditModal
                 isOpen={isEditOpen}
-                onClose={handleCloseModals}
+                isLoading={isTransactionOperationLoading}
                 transaction={transactionId ? transactions.find(t => t.id === transactionId) || null : null}
                 categories={categories}
+                onClose={handleCloseModals}
+                onAddSave={fetchAddTransaction}
+                onEditSave={fetchEditTransaction}
             />
-            <TransactionDeleteModal isOpen={isDeleteOpen} onClose={handleCloseModals} />
+            <TransactionDeleteModal
+                isOpen={isDeleteOpen}
+                isLoading={isTransactionOperationLoading}
+                onClose={handleCloseModals}
+                onDelete={() => transactionId && fetchDeleteTransaction(transactionId)}
+            />
         </React.Fragment>
     )
 }
