@@ -66,7 +66,8 @@ It contains the following pages:
 
 In the `Dashboard` page, the user can see the list of transactions and some statistics about the transactions. The user can also add, edit, and delete transactions.
 
-![Frontend](./docs/frontend.png)
+![Frontend Transactions](./docs/frontend-transactions.png)
+![Frontend Categories](./docs/frontend-categories.png)
 
 Afret the frontend is running, it can be accessed at the following URL:
 
