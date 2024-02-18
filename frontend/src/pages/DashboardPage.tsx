@@ -1,9 +1,6 @@
 import { Stack } from '@chakra-ui/react'
 
-import { TransactionList } from './Transactions'
-import { Statistics } from './Statistics'
-import { NavBar } from './NavBar'
-
+import { NavBar, Statistics, TransactionList } from 'components'
 import { Transaction, Category } from '@types'
 
 const transactions: Transaction[] = [

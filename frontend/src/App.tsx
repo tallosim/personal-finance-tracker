@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 
 import LoginPage from 'pages/LoginPage'
 import SignupPage from 'pages/SignupPage'
-import DashboardPage from 'pages/Dashboard/DashboardPage'
+import DashboardPage from 'pages/DashboardPage'
 
 const App = () => {
     return (
