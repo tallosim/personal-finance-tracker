@@ -28,10 +28,15 @@ export const Transactions = ({
         .sort((a, b) => new Date(b.occurredAt).getTime() - new Date(a.occurredAt).getTime())
         .map(t => ({ ...t, category: categories.find(c => c.id === t.categoryId) || categories[0] }))
 
-    const categoriesWithTransactions = categories.map(c => ({
-        ...c,
-        transactions: transactionsWithCategory.filter(t => t.categoryId === c.id),
-    }))
+    const categoriesWithTransactions = categories
+        .map(c => ({
+            ...c,
+            transactions: transactionsWithCategory.filter(t => t.categoryId === c.id).filter(t => t.type === 'expense'),
+        }))
+        .map(c => ({
+            ...c,
+            total: c.transactions.reduce((acc, t) => acc + t.amount, 0),
+        }))
 
     return (
         <Center>
@@ -40,18 +45,18 @@ export const Transactions = ({
                     <HStack display='flex' justifyContent='space-between' width='full' alignItems='center'>
                         <ToggleButtonGroup colorScheme='blue' size='sm' isAttached>
                             <Button
-								_active={{ bg: 'blue.500', color: 'white' }}
+                                _active={{ bg: 'blue.500', color: 'white' }}
                                 variant={viewMode === 'transactions' ? 'solid' : 'outline'}
                                 onClick={() => setViewMode('transactions')}
                             >
                                 All transactions
                             </Button>
                             <Button
-								_active={{ bg: 'blue.500', color: 'white' }}
+                                _active={{ bg: 'blue.500', color: 'white' }}
                                 variant={viewMode === 'categories' ? 'solid' : 'outline'}
                                 onClick={() => setViewMode('categories')}
                             >
-                                By categories
+                                Expenses by categories
                             </Button>
                         </ToggleButtonGroup>
                         <Button

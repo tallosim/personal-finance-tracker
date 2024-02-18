@@ -5,7 +5,7 @@ import { TransactionCard } from 'components'
 
 type CategoryListProps = {
     isLoading: boolean
-    categories: (Category & { transactions: (Transaction & { category: Category })[] })[]
+    categories: (Category & { transactions: (Transaction & { category: Category })[]; total: number })[]
     handleEditTransaction: (transactionId: string) => void
     handleDeleteTransaction: (transactionId: string) => void
 }
@@ -31,14 +31,14 @@ export const CategoryList = ({
                                     {category.title}
                                 </Heading>
                                 <Text textStyle='lg' fontWeight='medium' color='fg.muted'>
-                                    {category.transactions.length} transactions
+                                    {category.total !== 0 ? '-' : ''} {category.total.toFixed(2)} DKK
                                 </Text>
                             </HStack>
                             {category.transactions.length > 0 ? (
                                 category.transactions.map((transaction, i) => (
                                     <TransactionCard
                                         key={i}
-										showCategory={false}
+                                        showCategory={false}
                                         transaction={transaction}
                                         category={transaction.category}
                                         handleEditTransaction={handleEditTransaction}
