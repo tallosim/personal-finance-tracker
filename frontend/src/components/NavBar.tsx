@@ -6,7 +6,7 @@ type NavBarProps = {
 
 export const NavBar = ({ name }: NavBarProps) => (
     <Box as='section'>
-        <Box borderBottomWidth='1px' position='relative' zIndex='tooltip'>
+        <Box borderBottomWidth='1px' position='relative' zIndex='sticky' top='0' bg='bg.surface' boxShadow='sm'>
             <Container py={4}>
                 <HStack spacing={4} justifyContent='space-between'>
                     <Heading size='md' fontWeight='semibold'>
