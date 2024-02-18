@@ -43,7 +43,7 @@ export const Transactions = ({
         <Center>
             <Container p={4} width='fit-content'>
                 <Stack spacing={4} flex={1} width='fit-content'>
-                    <HStack display='flex' justifyContent='space-between' width='full' alignItems='center'>
+                    <HStack display='flex' justifyContent='space-between' width='2xl' alignItems='center'>
                         <ToggleButtonGroup colorScheme='blue' size='sm' isAttached>
                             <Button
                                 _active={{ bg: 'blue.500', color: 'white' }}

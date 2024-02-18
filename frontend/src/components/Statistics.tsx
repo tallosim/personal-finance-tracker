@@ -9,7 +9,7 @@ type StatProps = {
 }
 
 const Stat = ({ isLoading, title, value }: StatProps) => (
-    <Card bg='bg.surface' p={4} borderRadius='lg' boxShadow='sm' width={48}>
+    <Card bg='bg.surface' p={4} borderRadius='lg' boxShadow='sm' width={60}>
         <Stack spacing={2} alignItems='center'>
             <Text textStyle='xl' color='fg.muted'>
                 {title}
