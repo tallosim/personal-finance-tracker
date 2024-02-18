@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package.json yarn.lock tsconfig.json openapi.yml ./
 COPY src ./src
 
-RUN yarn install
+RUN yarn install --frozen-lockfile --production=true
 RUN yarn build
 
 ENV NODE_ENV=production
