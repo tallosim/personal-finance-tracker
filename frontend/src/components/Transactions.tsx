@@ -11,6 +11,7 @@ import {
     List,
     ListItem,
     Square,
+    Spinner,
     Icon,
     IconButton,
     Menu,
@@ -92,6 +93,7 @@ export const TransactionCard = ({
 )
 
 type TransactionListProps = {
+    isLoading: boolean
     transactions: Transaction[]
     categories: Category[]
     handleAddTransaction: () => void
@@ -100,6 +102,7 @@ type TransactionListProps = {
 }
 
 export const TransactionList = ({
+    isLoading,
     transactions,
     categories,
     handleAddTransaction,
@@ -117,13 +120,29 @@ export const TransactionList = ({
                         <Text textStyle='2xl' fontWeight='semibold'>
                             Transactions
                         </Text>
-                        <Button leftIcon={<FaPlus />} colorScheme='blue' variant='solid' size='xs' onClick={handleAddTransaction}>
+                        <Button
+                            leftIcon={<FaPlus />}
+                            colorScheme='blue'
+                            variant='solid'
+                            size='xs'
+                            onClick={handleAddTransaction}
+                        >
                             Add Transaction
                         </Button>
                     </HStack>
                     <List width='fit-content' overflowY='scroll' maxHeight='65vh' px={4}>
                         <Stack spacing={3} width='fit-content'>
-                            {transactions.length > 0 ? (
+                            {isLoading ? (
+                                <Box width='lg' textAlign='center'>
+                                    <Spinner
+                                        thickness='4px'
+                                        speed='0.65s'
+                                        emptyColor='gray.200'
+                                        color='blue.500'
+                                        size='xl'
+                                    />
+                                </Box>
+                            ) : transactions.length > 0 ? (
                                 transactions.map((transaction, index) => (
                                     <TransactionCard
                                         key={index}

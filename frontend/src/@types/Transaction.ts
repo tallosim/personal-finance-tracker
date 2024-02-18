@@ -8,3 +8,9 @@ export interface Transaction {
     categoryId: string
     updatedAt: Date
 }
+
+export interface Statistics {
+    totalIncome: number
+    totalExpense: number
+    balance: number
+}

@@ -15,3 +15,8 @@ export const isLoggedIn = () => {
 
     return true
 }
+
+export const logout = () => {
+    // Remove the expiration date from the local storage
+    localStorage.removeItem('expirationDate')
+}
