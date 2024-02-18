@@ -5,7 +5,7 @@ import {
     ErrorAlert,
     NavBar,
     StatCards,
-    TransactionList,
+    Transactions,
     TransactionEditModal,
     TransactionDeleteModal,
 } from 'components'
@@ -150,7 +150,7 @@ export const DashboardPage = () => {
                 <NavBar />
                 <ErrorAlert message={error} />
                 <StatCards statistics={statistics} isLoading={isCategoryLoading} />
-                <TransactionList
+                <Transactions
                     isLoading={isTransactionLoading}
                     transactions={transactions}
                     categories={categories}

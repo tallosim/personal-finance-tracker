@@ -1,5 +1,7 @@
 export * from './NavBar'
 export * from './Transactions'
+export * from './TransactionCard'
+export * from './TransactionList'
 export * from './Statistics'
 export * from './TransactionModal'
 export * from './LoginForm'
