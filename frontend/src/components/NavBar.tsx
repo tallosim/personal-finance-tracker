@@ -21,7 +21,7 @@ export const NavBar = () => {
     // Fetch the user data when the component mounts
     useEffect(() => {
         fetchUser()
-    }, [fetchUser])
+    }, [])
 
     const name = user?.name || 'User'
 
