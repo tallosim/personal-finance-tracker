@@ -8,6 +8,7 @@ import {
     Transactions,
     TransactionEditModal,
     TransactionDeleteModal,
+    TimeFilter,
 } from 'components'
 import { listTransactions, listCategories, createTransaction, updateTransaction, deleteTransaction } from 'services'
 import { Transaction, Category, Statistics } from '@types'
@@ -22,11 +23,14 @@ export const DashboardPage = () => {
     const [categories, setCategories] = useState<Category[]>([])
 
     // Fetch transactions from the API
-    const fetchTransactions = async () => {
+    const fetchTransactions = async (startDate?: Date, endDate?: Date) => {
         setError(null)
         setIsTransactionLoading(true)
 
-        const { success, data, message } = await listTransactions()
+        const { success, data, message } = await listTransactions(
+            startDate ? startDate : undefined,
+            endDate ? endDate : undefined,
+        )
 
         setIsTransactionLoading(false)
 
@@ -144,11 +148,21 @@ export const DashboardPage = () => {
         setTransactionId(null)
     }
 
+    // Handle filter change
+    const handleFilterChange = (isFiltering: boolean, startDate: Date | null, endDate: Date | null) => {
+        if (isFiltering) {
+            fetchTransactions(startDate ? startDate : undefined, endDate ? endDate : undefined)
+        } else {
+            fetchTransactions()
+        }
+    }
+
     return (
         <React.Fragment>
             <Stack>
                 <NavBar />
                 <ErrorAlert message={error} />
+                <TimeFilter onFilterChange={handleFilterChange} />
                 <StatCards statistics={statistics} isLoading={isCategoryLoading} />
                 <Transactions
                     isLoading={isTransactionLoading}

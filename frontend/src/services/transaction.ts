@@ -3,9 +3,14 @@ import axios, { isAxiosError } from 'axios'
 import { logout } from 'helpers'
 import { APIResponse, APIError, Transaction, Statistics } from '@types'
 
-export const listTransactions = async () => {
+export const listTransactions = async (startDate?: Date, endDate?: Date) => {
     try {
-        const response = await axios.get('/api/transactions')
+        const response = await axios.get('/api/transactions', {
+            params: {
+                startDate: startDate?.toISOString(),
+                endDate: endDate?.toISOString(),
+            },
+        })
         const data = response.data as APIResponse<{ transactions: Transaction[]; statistics: Statistics }>
 
         return data
