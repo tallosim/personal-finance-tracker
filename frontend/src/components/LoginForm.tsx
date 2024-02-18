@@ -1,5 +1,18 @@
-import { Button, Container, FormControl, FormLabel, Heading, Input, Link, Stack, Text } from '@chakra-ui/react'
+import {
+    Button,
+    Container,
+    FormControl,
+    FormLabel,
+    FormErrorMessage,
+    Heading,
+    Input,
+    Link,
+    Stack,
+    Text,
+} from '@chakra-ui/react'
 import { useFormik } from 'formik'
+
+import { loginSchema } from 'schemas'
 
 export const LoginForm = () => {
     const initialValues = {
@@ -7,8 +20,9 @@ export const LoginForm = () => {
         password: '',
     }
 
-    const { values, handleChange, handleSubmit } = useFormik({
+    const { values, errors, touched, handleChange, handleSubmit, handleBlur } = useFormik({
         initialValues,
+		validationSchema: loginSchema,
         onSubmit: values => {
             console.log(values)
         },
@@ -23,7 +37,7 @@ export const LoginForm = () => {
                 </Stack>
                 <Stack spacing='6'>
                     <Stack spacing='5'>
-                        <FormControl isRequired>
+                        <FormControl isRequired isInvalid={Boolean(errors.email) && touched.email}>
                             <FormLabel>Email</FormLabel>
                             <Input
                                 id='email'
@@ -32,9 +46,11 @@ export const LoginForm = () => {
                                 type='email'
                                 value={values.email}
                                 onChange={handleChange}
+                                onBlur={handleBlur}
                             />
+                            <FormErrorMessage>{errors.email}</FormErrorMessage>
                         </FormControl>
-                        <FormControl isRequired>
+                        <FormControl isRequired isInvalid={Boolean(errors.password) && touched.password}>
                             <FormLabel>Password</FormLabel>
                             <Input
                                 id='password'
@@ -43,7 +59,9 @@ export const LoginForm = () => {
                                 type='password'
                                 value={values.password}
                                 onChange={handleChange}
+                                onBlur={handleBlur}
                             />
+                            <FormErrorMessage>{errors.password}</FormErrorMessage>
                         </FormControl>
                     </Stack>
                     <Button onClick={() => handleSubmit()}>Sign in</Button>

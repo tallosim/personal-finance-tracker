@@ -1,5 +1,18 @@
-import { Button, Container, FormControl, FormLabel, Heading, Input, Link, Stack, Text } from '@chakra-ui/react'
+import {
+    Button,
+    Container,
+    FormControl,
+    FormLabel,
+    FormErrorMessage,
+    Heading,
+    Input,
+    Link,
+    Stack,
+    Text,
+} from '@chakra-ui/react'
 import { useFormik } from 'formik'
+
+import { signupSchema } from 'schemas'
 
 export const SignupForm = () => {
     const initialValues = {
@@ -9,8 +22,9 @@ export const SignupForm = () => {
         passwordRepeat: '',
     }
 
-    const { values, handleChange, handleSubmit } = useFormik({
+    const { values, errors, touched, handleChange, handleSubmit, handleBlur } = useFormik({
         initialValues,
+        validationSchema: signupSchema,
         onSubmit: values => {
             console.log(values)
         },
@@ -25,7 +39,7 @@ export const SignupForm = () => {
                 </Stack>
                 <Stack spacing='6'>
                     <Stack spacing='5'>
-                        <FormControl isRequired>
+                        <FormControl isRequired isInvalid={Boolean(errors.name) && touched.name}>
                             <FormLabel>Full Name</FormLabel>
                             <Input
                                 id='name'
@@ -33,9 +47,11 @@ export const SignupForm = () => {
                                 placeholder='Enter your full name'
                                 value={values.name}
                                 onChange={handleChange}
+                                onBlur={handleBlur}
                             />
+                            <FormErrorMessage>{errors.name}</FormErrorMessage>
                         </FormControl>
-                        <FormControl isRequired>
+                        <FormControl isRequired isInvalid={Boolean(errors.email) && touched.email}>
                             <FormLabel>Email</FormLabel>
                             <Input
                                 id='email'
@@ -44,9 +60,11 @@ export const SignupForm = () => {
                                 type='email'
                                 value={values.email}
                                 onChange={handleChange}
+                                onBlur={handleBlur}
                             />
+                            <FormErrorMessage>{errors.email}</FormErrorMessage>
                         </FormControl>
-                        <FormControl isRequired>
+                        <FormControl isRequired isInvalid={Boolean(errors.password) && touched.password}>
                             <FormLabel>Password</FormLabel>
                             <Input
                                 id='password'
@@ -55,9 +73,11 @@ export const SignupForm = () => {
                                 type='password'
                                 value={values.password}
                                 onChange={handleChange}
+                                onBlur={handleBlur}
                             />
+                            <FormErrorMessage>{errors.password}</FormErrorMessage>
                         </FormControl>
-                        <FormControl isRequired>
+                        <FormControl isRequired isInvalid={Boolean(errors.passwordRepeat) && touched.passwordRepeat}>
                             <FormLabel>Password Repeat</FormLabel>
                             <Input
                                 id='passwordRepeat'
@@ -66,7 +86,9 @@ export const SignupForm = () => {
                                 type='password'
                                 value={values.passwordRepeat}
                                 onChange={handleChange}
+                                onBlur={handleBlur}
                             />
+                            <FormErrorMessage>{errors.passwordRepeat}</FormErrorMessage>
                         </FormControl>
                     </Stack>
                     <Button onClick={() => handleSubmit()}>Sign up</Button>

@@ -9,6 +9,7 @@ import {
     ModalCloseButton,
     FormControl,
     FormLabel,
+    FormErrorMessage,
     Input,
     Stack,
     HStack,
@@ -21,6 +22,7 @@ import {
 import { useFormik } from 'formik'
 
 import { Transaction, Category } from '@types'
+import { transactionSchema } from 'schemas'
 
 type TransactionModalProps = {
     transaction: Transaction | null
@@ -39,9 +41,10 @@ export const TransactionEditModal = ({ transaction, categories, isOpen, onClose 
         occurredAt: isEdit ? transaction.occurredAt.toISOString().slice(0, 16) : '',
     }
 
-    const { values, handleChange, handleSubmit, setFieldValue } = useFormik({
+    const { values, errors, touched, handleChange, setFieldValue, handleSubmit, handleBlur, resetForm } = useFormik({
         enableReinitialize: true,
         initialValues,
+        validationSchema: transactionSchema,
         onSubmit: values => {
             const newTransaction: Omit<Transaction, 'id' | 'userId' | 'updatedAt'> = {
                 type: values.type,
@@ -53,6 +56,7 @@ export const TransactionEditModal = ({ transaction, categories, isOpen, onClose 
             console.log(newTransaction)
             // TODO: Implement the logic to save the transaction
 
+            resetForm()
             onClose()
         },
     })
@@ -72,7 +76,7 @@ export const TransactionEditModal = ({ transaction, categories, isOpen, onClose 
                 <ModalCloseButton />
                 <ModalBody pb={6}>
                     <Stack spacing={4}>
-                        <FormControl isRequired>
+                        <FormControl isRequired isInvalid={Boolean(errors.type) && touched.type}>
                             <FormLabel>Transaction type</FormLabel>
                             <RadioGroup
                                 id='type'
@@ -80,14 +84,16 @@ export const TransactionEditModal = ({ transaction, categories, isOpen, onClose 
                                 defaultValue='expense'
                                 value={values.type}
                                 onChange={value => setFieldValue('type', value)}
+                                onBlur={handleBlur}
                             >
                                 <HStack spacing='24px'>
                                     <Radio value='expense'>Expense</Radio>
                                     <Radio value='income'>Income</Radio>
                                 </HStack>
                             </RadioGroup>
+                            <FormErrorMessage>{errors.type}</FormErrorMessage>
                         </FormControl>
-                        <FormControl isRequired>
+                        <FormControl isRequired isInvalid={Boolean(errors.description) && touched.description}>
                             <FormLabel>Description</FormLabel>
                             <Input
                                 id='description'
@@ -95,9 +101,11 @@ export const TransactionEditModal = ({ transaction, categories, isOpen, onClose 
                                 placeholder='Description'
                                 value={values.description}
                                 onChange={handleChange}
+                                onBlur={handleBlur}
                             />
+                            <FormErrorMessage>{errors.description}</FormErrorMessage>
                         </FormControl>
-                        <FormControl isRequired>
+                        <FormControl isRequired isInvalid={Boolean(errors.amount) && touched.amount}>
                             <FormLabel>Amount (DKK)</FormLabel>
                             <NumberInput
                                 id='amount'
@@ -106,11 +114,13 @@ export const TransactionEditModal = ({ transaction, categories, isOpen, onClose 
                                 precision={2}
                                 value={values.amount}
                                 onChange={valueAsString => handleNumberInputChange(valueAsString, 'amount')}
+                                onBlur={handleBlur}
                             >
                                 <NumberInputField />
                             </NumberInput>
+                            <FormErrorMessage>{errors.amount}</FormErrorMessage>
                         </FormControl>
-                        <FormControl isRequired>
+                        <FormControl isRequired isInvalid={Boolean(errors.categoryId) && touched.categoryId}>
                             <FormLabel>Category</FormLabel>
                             <Select
                                 id='categoryId'
@@ -118,6 +128,7 @@ export const TransactionEditModal = ({ transaction, categories, isOpen, onClose 
                                 placeholder='Select category'
                                 value={values.categoryId}
                                 onChange={handleChange}
+                                onBlur={handleBlur}
                             >
                                 {categories
                                     .sort((a, b) => a.sequence - b.sequence)
@@ -127,8 +138,9 @@ export const TransactionEditModal = ({ transaction, categories, isOpen, onClose 
                                         </option>
                                     ))}
                             </Select>
+                            <FormErrorMessage>{errors.categoryId}</FormErrorMessage>
                         </FormControl>
-                        <FormControl isRequired>
+                        <FormControl isRequired isInvalid={Boolean(errors.occurredAt) && touched.occurredAt}>
                             <FormLabel>Transaction date</FormLabel>
                             <Input
                                 id='occurredAt'
@@ -137,6 +149,7 @@ export const TransactionEditModal = ({ transaction, categories, isOpen, onClose 
                                 value={values.occurredAt}
                                 onChange={handleChange}
                             />
+                            <FormErrorMessage>{errors.occurredAt}</FormErrorMessage>
                         </FormControl>
                     </Stack>
                 </ModalBody>
