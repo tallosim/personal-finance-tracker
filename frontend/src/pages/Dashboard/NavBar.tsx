@@ -1,4 +1,4 @@
-import { Avatar, Box, Container, HStack, Text, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react'
+import { Avatar, Box, Container, HStack, Text, Heading, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react'
 
 type NavBarProps = {
     name: string
@@ -9,11 +9,11 @@ export const NavBar = ({ name }: NavBarProps) => (
         <Box borderBottomWidth='1px' position='relative' zIndex='tooltip'>
             <Container py={4}>
                 <HStack spacing={4} justifyContent='space-between'>
-                    <Text textStyle='2xl' fontWeight='bold'>
+                    <Heading size='md' fontWeight='semibold'>
                         Personal Finance Tracker
-                    </Text>
+                    </Heading>
                     <HStack spacing={4}>
-                        <Text textStyle='md' fontWeight='semibold'>
+                        <Text textStyle='lg' fontWeight='semibold'>
                             {name}
                         </Text>
                         <Menu placement='bottom'>
