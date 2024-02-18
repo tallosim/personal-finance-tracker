@@ -1,3 +1,4 @@
+INSERT INTO "categories" ("title", "sequence") VALUES ('Income', 0);
 INSERT INTO "categories" ("title", "sequence") VALUES ('Home', 1);
 INSERT INTO "categories" ("title", "sequence") VALUES ('Loan', 2);
 INSERT INTO "categories" ("title", "sequence") VALUES ('Groceries', 3);
