@@ -1,4 +1,6 @@
 import {
+    Alert,
+    AlertIcon,
     Button,
     Container,
     FormControl,
@@ -78,9 +80,10 @@ export const LoginForm = ({ handleLogin, isLoading, error }: LoginFormProps) => 
                             <FormErrorMessage>{errors.password}</FormErrorMessage>
                         </FormControl>
                         {error && (
-                            <Text textStyle='md' color='red.500' textAlign='center'>
+                            <Alert status='error'>
+                                <AlertIcon />
                                 {error}
-                            </Text>
+                            </Alert>
                         )}
                     </Stack>
                     <Button onClick={() => handleSubmit()} isLoading={isLoading} loadingText='Logging in'>

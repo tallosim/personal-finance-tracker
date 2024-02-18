@@ -1,7 +1,7 @@
 import axios, { isAxiosError } from 'axios'
 import { jwtDecode } from 'jwt-decode'
 
-import { APIResponse, APIError } from '@types'
+import { APIResponse, APIError, User } from '@types'
 
 export const login = async (email: string, password: string) => {
     try {
@@ -15,6 +15,21 @@ export const login = async (email: string, password: string) => {
 
         // Save the expiration date in the local storage
         localStorage.setItem('expirationDate', experationDate.toISOString())
+
+        return data
+    } catch (error) {
+        if (isAxiosError(error)) {
+            const response = error.response?.data as APIError
+            return response
+        }
+        throw error
+    }
+}
+
+export const signup = async (user: Omit<User, 'id' | 'updatedAt'>) => {
+    try {
+        const response = await axios.post('/api/users', user)
+        const data = response.data as APIResponse<{ user: User }>
 
         return data
     } catch (error) {
