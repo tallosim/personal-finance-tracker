@@ -735,6 +735,20 @@ paths:
           schema:
             type: string
             example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiOTQ1MjYxZi1iMTg0LTQ5OTctOTViYy0yYWNhNmM2ZTM1NzQiLCJ1c2VybmFtZSI6IklfYW1fc2V4eV80MiIsImlhdCI6MTcwODE3MTc0NSwiZXhwIjoxNzA4MjU4MTQ1fQ.W2QcxAK5r2dQDLTQ3PzmJAoyWD0c56wNv5-8vOOXPUg'
+        - in: query
+          name: startDate
+          required: false
+          description: Start date
+          schema:
+            type: string
+            example: '2023-09-01T00:00:00.000Z'
+        - in: query
+          name: endDate
+          required: false
+          description: End date
+          schema:
+            type: string
+            example: '2023-09-01T00:00:00.000Z'
       responses:
         '200':
           description: Transaction read successfully
