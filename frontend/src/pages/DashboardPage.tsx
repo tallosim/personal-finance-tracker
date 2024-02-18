@@ -1,5 +1,5 @@
-import React from 'react'
-import { Stack } from '@chakra-ui/react'
+import React, { useState } from 'react'
+import { Stack, useDisclosure } from '@chakra-ui/react'
 
 import { NavBar, Statistics, TransactionList, TransactionEditModal } from 'components'
 import { Transaction, Category } from '@types'
@@ -211,17 +211,30 @@ const categories: Category[] = [
 ]
 
 export const DashboardPage = () => {
+    // Transaction edit modal
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const [transactionId, setTransactionId] = useState<string | null>(null)
+
+    const handleEditTransaction = (id: string) => {
+        setTransactionId(id)
+        onOpen()
+    }
+
     return (
         <React.Fragment>
             <Stack>
                 <NavBar name='John Doe' />
                 <Statistics />
-                <TransactionList transactions={transactions} categories={categories} />
+                <TransactionList
+                    transactions={transactions}
+                    categories={categories}
+                    handleEditTransaction={handleEditTransaction}
+                />
             </Stack>
             <TransactionEditModal
-                isOpen={true}
-                onClose={() => console.log('close')}
-                transaction={transactions[0]}
+                isOpen={isOpen}
+                onClose={onClose}
+                transaction={transactionId ? transactions.find(t => t.id === transactionId) || null : null}
                 categories={categories}
             />
         </React.Fragment>

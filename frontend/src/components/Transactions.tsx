@@ -30,9 +30,10 @@ import {
 type TransactionCardProps = {
     transaction: Transaction
     category: Category
+    handleEditTransaction: (transactionId: string) => void
 }
 
-export const TransactionCard = ({ transaction, category }: TransactionCardProps) => (
+export const TransactionCard = ({ transaction, category, handleEditTransaction }: TransactionCardProps) => (
     <ListItem key={transaction.id} value={transaction.id} position='relative' width='fit-content'>
         <Card bg='bg.surface' p={4} width='lg' borderRadius='lg' boxShadow='sm'>
             <HStack spacing={4} display='flex' alignItems='center'>
@@ -70,7 +71,9 @@ export const TransactionCard = ({ transaction, category }: TransactionCardProps)
                         _hover={{ bg: 'gray.50' }}
                     />
                     <MenuList>
-                        <MenuItem icon={<FaPenToSquare />}>Edit Transaction</MenuItem>
+                        <MenuItem icon={<FaPenToSquare />} onClick={() => handleEditTransaction(transaction.id)}>
+                            Edit Transaction
+                        </MenuItem>
                         <MenuItem icon={<FaTrashCan />}>Delete Transaction</MenuItem>
                     </MenuList>
                 </Menu>
@@ -82,9 +85,10 @@ export const TransactionCard = ({ transaction, category }: TransactionCardProps)
 type TransactionListProps = {
     transactions: Transaction[]
     categories: Category[]
+    handleEditTransaction: (transactionId: string) => void
 }
 
-export const TransactionList = ({ transactions, categories }: TransactionListProps) => {
+export const TransactionList = ({ transactions, categories, handleEditTransaction }: TransactionListProps) => {
     const getCategory = (id: string) =>
         categories.sort((a, b) => a.sequence - b.sequence).find(c => c.id === id) || categories[categories.length - 1]
 
@@ -107,6 +111,7 @@ export const TransactionList = ({ transactions, categories }: TransactionListPro
                                     key={index}
                                     transaction={transaction}
                                     category={getCategory(transaction.categoryId)}
+                                    handleEditTransaction={handleEditTransaction}
                                 />
                             ))}
                         </Stack>
