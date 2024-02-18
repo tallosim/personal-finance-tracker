@@ -14,7 +14,13 @@ import { useFormik } from 'formik'
 
 import { loginSchema } from 'schemas'
 
-export const LoginForm = () => {
+type LoginFormProps = {
+    handleLogin: (email: string, password: string) => void
+    isLoading: boolean
+    error: string | null
+}
+
+export const LoginForm = ({ handleLogin, isLoading, error }: LoginFormProps) => {
     const initialValues = {
         email: '',
         password: '',
@@ -22,9 +28,9 @@ export const LoginForm = () => {
 
     const { values, errors, touched, handleChange, handleSubmit, handleBlur } = useFormik({
         initialValues,
-		validationSchema: loginSchema,
+        validationSchema: loginSchema,
         onSubmit: values => {
-            console.log(values)
+            handleLogin(values.email, values.password)
         },
     })
 
@@ -37,7 +43,11 @@ export const LoginForm = () => {
                 </Stack>
                 <Stack spacing='6'>
                     <Stack spacing='5'>
-                        <FormControl isRequired isInvalid={Boolean(errors.email) && touched.email}>
+                        <FormControl
+                            isRequired
+                            isInvalid={Boolean(errors.email) && touched.email}
+                            isDisabled={isLoading}
+                        >
                             <FormLabel>Email</FormLabel>
                             <Input
                                 id='email'
@@ -50,7 +60,11 @@ export const LoginForm = () => {
                             />
                             <FormErrorMessage>{errors.email}</FormErrorMessage>
                         </FormControl>
-                        <FormControl isRequired isInvalid={Boolean(errors.password) && touched.password}>
+                        <FormControl
+                            isRequired
+                            isInvalid={Boolean(errors.password) && touched.password}
+                            isDisabled={isLoading}
+                        >
                             <FormLabel>Password</FormLabel>
                             <Input
                                 id='password'
@@ -63,8 +77,15 @@ export const LoginForm = () => {
                             />
                             <FormErrorMessage>{errors.password}</FormErrorMessage>
                         </FormControl>
+                        {error && (
+                            <Text textStyle='md' color='red.500' textAlign='center'>
+                                {error}
+                            </Text>
+                        )}
                     </Stack>
-                    <Button onClick={() => handleSubmit()}>Sign in</Button>
+                    <Button onClick={() => handleSubmit()} isLoading={isLoading} loadingText='Logging in'>
+                        Log in
+                    </Button>
                 </Stack>
                 <Text textStyle='sm' color='fg.muted' textAlign='center'>
                     Don't have an account? <Link href='/signup'> Sign up</Link>
