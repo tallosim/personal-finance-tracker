@@ -11,8 +11,8 @@ const Stat = ({ title, value }: StatProps) => (
             <Text textStyle='xl' color='fg.muted'>
                 {title}
             </Text>
-            <Text textStyle='3xl' fontWeight='medium'>
-                {value} DKK
+            <Text textStyle='2xl' fontWeight='medium'>
+                {value.toFixed(2)} DKK
             </Text>
         </Stack>
     </Card>
@@ -22,9 +22,9 @@ export const Statistics = () => (
     <Center>
         <Container p={4} width='fit-content'>
             <HStack spacing={4} width='fit-content'>
-                <Stat title='Total Income' value={12345} />
-                <Stat title='Total Expenses' value={6789} />
-                <Stat title='Total Balance' value={5556} />
+                <Stat title='Total Income' value={342.13} />
+                <Stat title='Total Expenses' value={21.04} />
+                <Stat title='Total Balance' value={321.09} />
             </HStack>
         </Container>
     </Center>
